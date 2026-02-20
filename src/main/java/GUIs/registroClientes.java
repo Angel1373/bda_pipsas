@@ -50,7 +50,6 @@ public class registroClientes extends JFrame {
         JPanel centro = new JPanel();
         centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
         
-        centro.add(Box.createVerticalStrut(20));
         
         //para meter nombres
         JLabel n = new JLabel("Nombres");
@@ -63,7 +62,7 @@ public class registroClientes extends JFrame {
         nombres.setMaximumSize(new Dimension(400, 50));
         nombres.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(nombres);
-        centro.add(Box.createVerticalStrut(20));
+        centro.add(Box.createVerticalStrut(15));
         
         //para meter apellido paterno
         JLabel ap = new JLabel("Apellido Paterno");
@@ -76,7 +75,7 @@ public class registroClientes extends JFrame {
         aPaterno.setMaximumSize(new Dimension(400, 50));
         aPaterno.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(aPaterno);
-        centro.add(Box.createVerticalStrut(20));
+        centro.add(Box.createVerticalStrut(15));
         
         //para meter apellido materno (opcional)
         JLabel am = new JLabel("Apellido Materno (Opcional)");
@@ -89,20 +88,47 @@ public class registroClientes extends JFrame {
         aMaterno.setMaximumSize(new Dimension(400, 50));
         aMaterno.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(aMaterno);
-        centro.add(Box.createVerticalStrut(20));
+        centro.add(Box.createVerticalStrut(15));
         
-        //para direccion de envio (opcional)
-        JLabel dir = new JLabel("Direccion de envio (Opcional)");
-        dir.setFont(new Font("Serif", Font.BOLD, 20));
-        dir.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(dir);
-        
-        JTextField direccion = new JTextField("");
-        direccion.setFont(new Font("Serif", Font.BOLD, 20));
-        direccion.setMaximumSize(new Dimension(400, 50));
-        direccion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(direccion);
-        centro.add(Box.createVerticalStrut(20));
+        //esta parte sera especial, para meter datos de la direccion de envio (opcionales)
+        //primero va calle (opcional)
+        JLabel calleLabel = new JLabel("Calle (opcional)");
+        calleLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        calleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(calleLabel);
+
+        JTextField calle = new JTextField("");
+        calle.setFont(new Font("Serif", Font.BOLD, 20));
+        calle.setMaximumSize(new Dimension(400, 50));
+        calle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(calle);
+        centro.add(Box.createVerticalStrut(15));
+
+        //numero (opcional)
+        JLabel numeroLabel = new JLabel("Numero (opcional)");
+        numeroLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        numeroLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(numeroLabel);
+
+        JTextField numero = new JTextField("");
+        numero.setFont(new Font("Serif", Font.BOLD, 20));
+        numero.setMaximumSize(new Dimension(400, 50));
+        numero.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(numero);
+        centro.add(Box.createVerticalStrut(15));
+
+        //colonia (opcional)
+        JLabel coloniaLabel = new JLabel("Colonia (opcional)");
+        coloniaLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        coloniaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(coloniaLabel);
+
+        JTextField colonia = new JTextField("");
+        colonia.setFont(new Font("Serif", Font.BOLD, 20));
+        colonia.setMaximumSize(new Dimension(400, 50));
+        colonia.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(colonia);
+        centro.add(Box.createVerticalStrut(15));
         
         //para meter el telefono(s)
         JLabel cphone = new JLabel("Telefono(s)");
@@ -115,7 +141,7 @@ public class registroClientes extends JFrame {
         telefono.setMaximumSize(new Dimension(400, 50));
         telefono.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(telefono);
-        centro.add(Box.createVerticalStrut(40));
+        centro.add(Box.createVerticalStrut(15));
         
         //para nombre de usuario
         JLabel nu = new JLabel("Nombre de Usuario");
@@ -128,7 +154,7 @@ public class registroClientes extends JFrame {
         nombreU.setMaximumSize(new Dimension(400, 50));
         nombreU.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(nombreU);
-        centro.add(Box.createVerticalStrut(20));
+        centro.add(Box.createVerticalStrut(15));
         
         //para la contraseña
         JLabel contra = new JLabel("Contraseña");
@@ -141,7 +167,6 @@ public class registroClientes extends JFrame {
         contraseña.setMaximumSize(new Dimension(400, 50));
         contraseña.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(contraseña);
-        centro.add(Box.createVerticalStrut(40));
         
         add(centro, BorderLayout.CENTER);
         
@@ -161,6 +186,6 @@ public class registroClientes extends JFrame {
         add(abajo, BorderLayout.SOUTH);
         
         
-        //meter aqui el action listener para cuando se da click en crear cuenta (lleva a la pantallaOpcionesCliente) 
+        //meter aqui el action listener para cuando se da click en crear cuenta () 
     }
 }
