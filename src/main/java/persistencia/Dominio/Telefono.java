@@ -9,32 +9,39 @@ package persistencia.Dominio;
  * @author Usuario
  */
 public class Telefono {
-    private int id_telefono;
-    private String numero;
+    private Integer id_telefono;
+    private String numeroTelefono;
     private String etiqueta;
     private int id_cliente;
 
-    public Telefono(int id_telefono, String numero, String etiqueta, int id_cliente) {
+    public Telefono(Integer id_telefono, String numeroTelefono, String etiqueta, int id_cliente) {
         this.id_telefono = id_telefono;
-        this.numero = numero;
+        this.numeroTelefono = numeroTelefono;
         this.etiqueta = etiqueta;
         this.id_cliente = id_cliente;
     }
 
-    public Telefono(String numero, String etiqueta, int id_cliente) {
-        this.numero = numero;
+    public Telefono(String numeroTelefono, String etiqueta, int id_cliente) {
+        this.numeroTelefono = numeroTelefono;
         this.etiqueta = etiqueta;
         this.id_cliente = id_cliente;
     }
 
-    public int getId_telefono() {
+    public Telefono() {
+    }
+
+    public Integer getId_telefono() {
         return id_telefono;
     }
 
-    public String getNumero() {
-        return numero;
+    public void setId_telefono(Integer id_telefono) {
+        this.id_telefono = id_telefono;
     }
+    
+    
+    
 
+  
     public String getEtiqueta() {
         return etiqueta;
     }
@@ -43,13 +50,17 @@ public class Telefono {
         return id_cliente;
     }
 
-    public void setId_telefono(int id_telefono) {
-        this.id_telefono = id_telefono;
+  
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
     }
+
+    
 
     public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
@@ -58,6 +69,12 @@ public class Telefono {
     public void setId_cliente(int id_cliente) {
         this.id_cliente = id_cliente;
     }
+
+    @Override
+    public String toString() {
+        return "Telefono{" + "id_telefono=" + id_telefono + ", numeroTelefono=" + numeroTelefono + ", etiqueta=" + etiqueta + ", id_cliente=" + id_cliente + '}';
+    }
+    
     
     
     

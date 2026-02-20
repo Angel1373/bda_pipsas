@@ -19,40 +19,31 @@ public class Cliente {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private EstadoCliente estado;
-    private String usuario;
     private LocalDate fechaNacimiento;
     private Integer edad;
-    private String contrasena;
-    private Integer idDomicilio;
 
     public Cliente() {
     }
 
-    public Cliente(String nombres, String apellidoPaterno, String apellidoMaterno, EstadoCliente estado, String usuario, LocalDate fechaNacimiento, Integer edad, String contrasena, Integer idDomicilio) {
+    public Cliente(String nombres, String apellidoPaterno, String apellidoMaterno, EstadoCliente estado, LocalDate fechaNacimiento, Integer edad) {
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.estado = estado;
-        this.usuario = usuario;
         this.fechaNacimiento = fechaNacimiento;
         this.edad = edad;
-        this.contrasena = contrasena;
-        this.idDomicilio = idDomicilio;
     }
     
     
     
-    public Cliente(Integer idCliente, String nombres, String apellidoPaterno, String apellidoMaterno, EstadoCliente estado, String usuario,LocalDate fechaNacimiento, Integer edad,String contrasena, Integer idDomicilio) {
+    public Cliente(Integer idCliente, String nombres, String apellidoPaterno, String apellidoMaterno, EstadoCliente estado,LocalDate fechaNacimiento, Integer edad) {
         this.idCliente = idCliente;
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.estado = estado;
-        this.usuario = usuario;
         this.fechaNacimiento = fechaNacimiento;
         this.edad = edad;
-        this.contrasena = contrasena;
-        this.idDomicilio = idDomicilio;
     }
 
     
@@ -111,16 +102,7 @@ public class Cliente {
         this.estado = estado;
     }
 
-    
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
+   
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -137,19 +119,12 @@ public class Cliente {
         this.edad = edad;
     }
 
-    public String getContrasena() {
-        return contrasena;
+    @Override
+    public String toString() {
+        return "Cliente{" + "idCliente=" + idCliente + ", nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", estado=" + estado + ", fechaNacimiento=" + fechaNacimiento + ", edad=" + edad + '}';
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
+    
 
-    public Integer getIdDomicilio() {
-        return idDomicilio;
-    }
 
-    public void setIdDomicilio(Integer idDomicilio) {
-        this.idDomicilio = idDomicilio;
-    }
 }

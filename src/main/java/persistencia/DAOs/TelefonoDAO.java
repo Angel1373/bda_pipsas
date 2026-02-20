@@ -32,45 +32,32 @@ public class TelefonoDAO implements ITelefonoDAO{
     }
     @Override
     public Telefono agregarTelefono(Telefono telefono) throws persistenciaException {
-        String comandoSQL = """
-                            INSERT INTO telefonos (numero, etiqueta, id_cliente)
-                            VALUES (?,?,?)
-                            """;
+         String sql = "INSERT INTO telefonos (numero, etiqueta, id_cliente) VALUES (?, ?, ?)";
 
-        try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL, Statement.RETURN_GENERATED_KEYS)) {
+            try (Connection conn = conexionBD.CrearConexion();
+                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, telefono.getNumero());
-            ps.setString(2, telefono.getEtiqueta());
-            ps.setInt(3, telefono.getId_cliente());
-                
-                //ejecutamos el comando usando el preparedStatement
-            int filasInsertadas = ps.executeUpdate();
-            
-            // == 0 si no se registro nada y == 1 si se registro 
-            if (filasInsertadas == 0) {
-                LOG.log(Level.WARNING, "No se pudo insertar el telefono: {0}", telefono);
-                throw new persistenciaException("No se pudo insertar el telefono.");
-            }
-            //obtenemos el id generado automaticamente y lo leemos con el rs
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    //obtenemos la primera columna que es el id generado y se lo ponemos al telefono
-                    // se obtiene el id generado por el insert del metodo por la base de datos lo creo
-                    telefono.setId_telefono(rs.getInt(1));
-                } else {
-                    throw new persistenciaException("Error al obtener el ID generado del nuevo telefono.");
+                ps.setString(1, telefono.getNumeroTelefono());
+                ps.setString(2, telefono.getEtiqueta());
+                ps.setInt(3, telefono.getId_cliente()); // viene de Usuario
+
+                int filas = ps.executeUpdate();
+                if (filas == 0) {
+                    throw new persistenciaException("No se insertó el telefono");
                 }
+
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        telefono.setId_telefono(rs.getInt(1));
+                    }
+                }
+
+                return telefono;
+
+            } catch (SQLException e) {
+                throw new persistenciaException("Error al insertar telefono", e);
             }
-
-            LOG.log(Level.INFO, "Telefono insertado con éxito. ID: {0}", telefono.getId_telefono());
-            return telefono;
-
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error de SQL al insertar el telefono", ex);
-            throw new persistenciaException("No se pudo agregar el telefono");
         }
-        
-    }
 }
     
 

@@ -10,30 +10,54 @@ package persistencia.Dominio;
  */
 public class Domicilio {
     
-    private int id_domicilio ;
+    private Integer id_domicilio ;
+    private int id_cliente;
     private String calle;
     private String colonia;
-    private String numero;
+    private String numeroCasa;
 
-    public Domicilio(int id_domicilio, String calle, String colonia, String numero) {
+    public Domicilio(Integer id_domicilio, int id_cliente, String calle, String colonia, String numeroCasa) {
         this.id_domicilio = id_domicilio;
+        this.id_cliente = id_cliente;
         this.calle = calle;
         this.colonia = colonia;
-        this.numero = numero;
+        this.numeroCasa = numeroCasa;
     }
 
-    public Domicilio(String calle, String colonia, String numero) {
+    public Domicilio(int id_cliente, String calle, String colonia, String numeroCasa) {
+        this.id_cliente = id_cliente;
         this.calle = calle;
         this.colonia = colonia;
-        this.numero = numero;
+        this.numeroCasa = numeroCasa;
     }
 
-    public int getId_domicilio() {
+    public Domicilio(String calle, String colonia, String numeroCasa) {
+        this.calle = calle;
+        this.colonia = colonia;
+        this.numeroCasa = numeroCasa;
+    }
+
+    public Domicilio() {
+    }
+
+    public Integer getId_domicilio() {
         return id_domicilio;
     }
 
-    public void setId_domicilio(int id_domicilio) {
+    public void setId_domicilio(Integer id_domicilio) {
         this.id_domicilio = id_domicilio;
+    }
+    
+    
+
+  
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
 
     public String getCalle() {
@@ -52,19 +76,19 @@ public class Domicilio {
         this.colonia = colonia;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getNumeroCasa() {
+        return numeroCasa;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNumeroCasa(String numeroCasa) {
+        this.numeroCasa = numeroCasa;
     }
 
     @Override
     public String toString() {
-        return "Domicilio{" + "id_domicilio=" + id_domicilio + ", calle=" + calle + ", colonia=" + colonia + ", numero=" + numero + '}';
+        return "Domicilio{" + "id_domicilio=" + id_domicilio + ", id_cliente=" + id_cliente + ", calle=" + calle + ", colonia=" + colonia + ", numeroCasa=" + numeroCasa + '}';
     }
-    
+
     
     
 }

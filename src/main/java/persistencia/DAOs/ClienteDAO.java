@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.Dominio.Cliente;
@@ -35,47 +37,32 @@ public class ClienteDAO implements IClienteDAO{
     @Override
     public Cliente agregarCliente(Cliente cliente) throws persistenciaException {
             String sql = """
-             INSERT INTO clientes
-             (nombres, apellido_paterno, apellido_materno, estado, usuario,
-              fecha_nacimiento, edad, contrasena, id_domicilio)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-             """;
+        INSERT INTO clientes
+        (id_cliente, nombres, apellido_paterno, apellido_materno, estado, fecha_nacimiento, edad)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """;
 
-         try (
-             Connection conn = conexionBD.CrearConexion();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
-         ) {
+    try (Connection conn = conexionBD.CrearConexion();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-             ps.setString(1, cliente.getNombres());
-             ps.setString(2, cliente.getApellidoPaterno());
-             ps.setString(3, cliente.getApellidoMaterno());
+        ps.setInt(1, cliente.getIdCliente()); // viene de Usuario
+        ps.setString(2, cliente.getNombres());
+        ps.setString(3, cliente.getApellidoPaterno());
+        ps.setString(4, cliente.getApellidoMaterno());
+        ps.setString(5, cliente.getEstado().getValor().toLowerCase()); // "activo" o "inactivo"
+        ps.setDate(6, Date.valueOf(cliente.getFechaNacimiento()));
+        ps.setInt(7, Period.between(cliente.getFechaNacimiento(), LocalDate.now()).getYears());
 
-             // tomamos el valor del enum con el get valor
-             ps.setString(4, cliente.getEstado().getValor());
+        int filas = ps.executeUpdate();
+        if (filas == 0) {
+            throw new persistenciaException("No se insertó el cliente");
+        }
 
-             ps.setString(5, cliente.getUsuario());
-             ps.setDate(6, Date.valueOf(cliente.getFechaNacimiento()));
-             ps.setInt(7, cliente.getEdad());
-             ps.setString(8, cliente.getContrasena());
-             ps.setInt(9, cliente.getIdDomicilio());
+        return cliente;
 
-             int filas = ps.executeUpdate();
-
-             if (filas == 0) {
-                 throw new persistenciaException("No se insertó el cliente");
-             }
-
-             try (ResultSet rs = ps.getGeneratedKeys()) {
-                 if (rs.next()) {
-                     cliente.setIdCliente(rs.getInt(1));
-                 }
-             }
-
-             return cliente;
-
-         } catch (SQLException e) {
-             throw new persistenciaException("Error al insertar cliente", e);
-         }
-     }
+    } catch (SQLException e) {
+        throw new persistenciaException("Error al insertar cliente", e);
+    }
     
+}
 }

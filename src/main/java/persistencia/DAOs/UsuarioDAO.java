@@ -21,43 +21,36 @@ import persistencia.conexion.IConexionBD;
  */
 public class UsuarioDAO implements IUsuarioDAO{
     private final IConexionBD conexionBD;
+    
+    private static final Logger LOG = Logger.getLogger(UsuarioDAO.class.getName());
 
-    private static final Logger LOG = Logger.getLogger(PedidoDAO.class.getName());
 
     public UsuarioDAO(IConexionBD conexionBD) {
         this.conexionBD = conexionBD;
     }
     @Override
     public Usuario agregarUsuario(Usuario usuario) throws persistenciaException {
-        String comandoSQL = "INSERT INTO usuarios (id_cliente, usuario, contrasena) VALUES (?, ?, ?)";
-        
-        try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps
-                = conn.prepareStatement(comandoSQL, Statement.RETURN_GENERATED_KEYS)) {
-            
-            ps.setInt(1, usuario.getId_cliente());
-            ps.setString(2, usuario.getUsuario());
-            ps.setString(3, usuario.getContrasena());
-            //ejecutamos el comando usando el preparedStatement
-            int filasInsertadas = ps.executeUpdate();
-            // == 0 si no se registro nada y == 1 si se registro
-            if (filasInsertadas == 0){
-                    LOG.log(Level.WARNING, "No se pudo insertar el usuario: {0}", usuario);
-                    throw new persistenciaException("No se pudo insertar el usuario.");
-                }
-            // obtenemos el id generado automaticamente y lo leemos con el rs
+        String sql = "INSERT INTO usuarios (usuario, contrasena) VALUES (?, ?)";
+
+        try (Connection conn = conexionBD.CrearConexion();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, usuario.getUsuario());
+            ps.setString(2, usuario.getContrasena());
+            ps.executeUpdate();
+
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    usuario.setId_cliente(rs.getInt(1));
+                    usuario.setId_cliente(rs.getInt(1)); // Guardamos el ID generado
+                } else {
+                    throw new persistenciaException("No se obtuvo el ID del usuario");
                 }
             }
 
-            LOG.log(Level.INFO, "Usuario insertado con exito para cliente ID: {0}",usuario.getId_cliente());
-
             return usuario;
 
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error de SQL al insertar el usuario", ex);
-            throw new persistenciaException("No se pudo agregar el usuario", ex);
+        } catch (SQLException e) {
+            throw new persistenciaException("Error al insertar usuario", e);
         }
     }
 }

@@ -4,6 +4,7 @@
  */
 package Negocio.BOs;
 
+import Negocio.DTOs.ClienteCompletoDTO;
 import Negocio.Excepciones.negocioException;
 import persistencia.Dominio.Cliente;
 
@@ -13,6 +14,6 @@ import persistencia.Dominio.Cliente;
  */
 public interface IClienteBO {
     
-    public Cliente insertarCliente(Cliente cliente) throws negocioException;
+    public Cliente insertarCliente(ClienteCompletoDTO cliente) throws negocioException;
     
 }

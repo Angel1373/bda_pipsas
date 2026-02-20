@@ -34,44 +34,32 @@ public class DomicilioDAO implements IDomicilioDAO {
   
     @Override
     public Domicilio agregarDomicilio(Domicilio domicilio) throws persistenciaException {
-        String comandoSQL = """
-                            INSERT INTO domicilios (calle, colonia, numero)
-                            VALUES (?,?,?)
-                            """;
+         String sql = "INSERT INTO domicilios (id_cliente, calle, colonia, numero) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = conexionBD.CrearConexion();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, domicilio.getCalle());
-            ps.setString(2, domicilio.getColonia());
-            ps.setString(3, domicilio.getNumero());
-                
-                //ejecutamos el comando usando el preparedStatement
-            int filasInsertadas = ps.executeUpdate();
-            
-            // == 0 si no se registro nada y == 1 si se registro 
-            if (filasInsertadas == 0) {
-                LOG.log(Level.WARNING, "No se pudo insertar el domicilio: {0}", domicilio);
-                throw new persistenciaException("No se pudo insertar el domicilio.");
+            ps.setInt(1, domicilio.getId_cliente()); // viene de Usuario
+            ps.setString(2, domicilio.getCalle());
+            ps.setString(3, domicilio.getColonia());
+            ps.setString(4, domicilio.getNumeroCasa());
+
+            int filas = ps.executeUpdate();
+            if (filas == 0) {
+                throw new persistenciaException("No se insertó el domicilio");
             }
-            //obtenemos el id generado automaticamente y lo leemos con el rs
+
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    //obtenemos la primera columna que es el id generado y se lo ponemos al domicilio
-                    // se obtiene el id generado por el insert del metodo por la base de datos lo creo
                     domicilio.setId_domicilio(rs.getInt(1));
-                } else {
-                    throw new persistenciaException("Error al obtener el ID generado del nuevo domicilio.");
                 }
             }
 
-            LOG.log(Level.INFO, "Domicilio insertado con éxito. ID: {0}", domicilio.getId_domicilio());
             return domicilio;
 
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error de SQL al insertar el domicilio", ex);
-            throw new persistenciaException("No se pudo agregar el domicilio");
+        } catch (SQLException e) {
+            throw new persistenciaException("Error al insertar domicilio", e);
         }
-        
     }
     
     }

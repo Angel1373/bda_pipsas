@@ -4,16 +4,25 @@
  */
 package Negocio.BOs;
 
+import Negocio.DTOs.ClienteCompletoDTO;
+import Negocio.DTOs.DomicilioDTO;
 import Negocio.DTOs.UsuarioDTO;
 import Negocio.Excepciones.negocioException;
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import persistencia.DAOs.IClienteDAO;
 import persistencia.DAOs.IDomicilioDAO;
+import persistencia.DAOs.ITelefonoDAO;
 import persistencia.DAOs.IUsuarioDAO;
 import persistencia.Dominio.Cliente;
+import persistencia.Dominio.Domicilio;
+import persistencia.Dominio.Telefono;
+import persistencia.Dominio.Usuario;
+import persistencia.Excepciones.persistenciaException;
 
 /**
  *
@@ -24,10 +33,19 @@ public class ClienteBO implements IClienteBO {
     private IClienteDAO clienteDAO;
     private IUsuarioDAO usuarioDAO;
     private IDomicilioDAO domicilioDAO;
+    private ITelefonoDAO telefonoDAO;
     // constructor para mandar a llamar al DAO
     public ClienteBO(IClienteDAO cliente){
        this.clienteDAO = cliente; 
     }
+
+    public ClienteBO(IClienteDAO clienteDAO, IUsuarioDAO usuarioDAO, IDomicilioDAO domicilioDAO, ITelefonoDAO telefonoDAO) {
+        this.clienteDAO = clienteDAO;
+        this.usuarioDAO = usuarioDAO;
+        this.domicilioDAO = domicilioDAO;
+        this.telefonoDAO = telefonoDAO;
+    }
+    
     
     
     private static final Logger LOG = Logger.getLogger(ClienteBO.class.getName());
@@ -35,7 +53,7 @@ public class ClienteBO implements IClienteBO {
     
 
     @Override
-    public  Cliente insertarCliente(Cliente cliente) throws negocioException {
+    public  Cliente insertarCliente(ClienteCompletoDTO cliente) throws negocioException {
          // aplicar todas las reglas de negocio para consultar un negocio
         // 1. validar que el objeto NO sea nulo
         if(cliente == null){
@@ -66,33 +84,76 @@ public class ClienteBO implements IClienteBO {
             LOG.warning("El cliente no puede no tener un estado");
             throw new negocioException("El estado es invalido");
         }
-         //7. validamos el usuario
-          if(cliente.getUsuario()==null){
-            LOG.warning("El cliente no puede no tener un usuario");
-            throw new negocioException("El cliente no puede tener un usuario");
-        }
- 
-        //8. Validamos fecha de nacimiento 
+        //7. Validamos fecha de nacimiento 
         if(!validarFechaNacimiento(cliente.getFechaNacimiento())){
             LOG.warning("No se pudo registrar la fecha");
             throw new negocioException("Se ingreso una fecha futura o menor a 2020");
         }
-        //9. validamos el domicilio
-         if(cliente.getIdDomicilio()!=null){
-            LOG.warning("El tecnico no puede tener un id ya asignado");
-            throw new negocioException("El tecnico no puede tener un id ya asignado");
+    
+        /*
+        En esta parte primero creamos el usuario para poder usar el id cliente en todas las tablas que se ocupen unir
+        creamos 2 variables
+        la de cliente guardado es para hacer el return y la de id cliente es para dar el cliente en el set
+        */
+        Cliente clienteGuardado = null;
+        Integer idCliente = null;
+
+        try {
+            // Insertamos el usuario
+            Usuario nuevoUsuario = new Usuario();
+            nuevoUsuario.setUsuario(cliente.getUsuario());
+            nuevoUsuario.setContrasena(cliente.getContrasena());
+
+            Usuario usuarioGuardado = usuarioDAO.agregarUsuario(nuevoUsuario);
+            if (usuarioGuardado == null || usuarioGuardado.getId_cliente() == null) {
+                throw new negocioException("No se pudo registrar el usuario");
+            }
+            idCliente = usuarioGuardado.getId_cliente();
+
+            // Insertamos el cliente
+            Cliente clienteNuevo = new Cliente();
+            clienteNuevo.setIdCliente(idCliente); //vincula con el id de cliente de usuario que es con el que uniermos todas las tablas
+            clienteNuevo.setNombres(cliente.getNombres());
+            clienteNuevo.setApellidoPaterno(cliente.getApellidoPaterno());
+            clienteNuevo.setApellidoMaterno(cliente.getApellidoMaterno());
+            clienteNuevo.setEstado(cliente.getEstado());
+            clienteNuevo.setFechaNacimiento(cliente.getFechaNacimiento());
+            clienteNuevo.setEdad(calcularEdad(cliente.getFechaNacimiento()));
+
+            clienteGuardado = clienteDAO.agregarCliente(clienteNuevo);
+
+            // insertamos el domicilio
+            Domicilio nuevoDomicilio = new Domicilio();
+            nuevoDomicilio.setId_cliente(idCliente); // se vincula con el id cliente
+            nuevoDomicilio.setCalle(cliente.getCalle());
+            nuevoDomicilio.setColonia(cliente.getColonia());
+            nuevoDomicilio.setNumeroCasa(cliente.getNumeroCasa());
+
+            domicilioDAO.agregarDomicilio(nuevoDomicilio);
+
+            // insertamos el telefono
+            Telefono nuevoTelefono = new Telefono();
+            nuevoTelefono.setId_cliente(idCliente); // se vincula con el id cliente
+            nuevoTelefono.setNumeroTelefono(cliente.getNumeroTelefono());
+            nuevoTelefono.setEtiqueta(cliente.getEtiqueta());
+
+            telefonoDAO.agregarTelefono(nuevoTelefono);
+
+        } catch (persistenciaException e) {
+            LOG.log(Level.SEVERE, "Error al insertar cliente completo", e);
+            throw new negocioException("Problemas al agregar el cliente completo", e);
         }
-     // mapear de DTO a entityclass
-     Cliente clienteNuevo = new Cliente();
-     clienteNuevo.setNombres(cliente.getNombres());
-     clienteNuevo.setApellidoPaterno(cliente.getApellidoPaterno());
-     clienteNuevo.setApellidoMaterno(cliente.getApellidoMaterno());
-     clienteNuevo.setEstado(cliente.getEstado().getValor());
-     clienteNuevo.setUsuario(cliente.getUsuario());
-     clienteNuevo.setFechaNacimiento(cliente.getFechaNacimiento());
+        
+        // Regresamos el cliente guardado con la variable de arriba 
+        // solo regresamos este por las demas tablas se crean y este es donde vienen los datos "importantes"
+        return clienteGuardado;
     }
     
-       
+    // Metodo para calcular la edad
+    private int calcularEdad(LocalDate fechaNacimiento){
+    return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+}
+    
     private boolean validarNombres(String nombres) throws negocioException{
         //verificamos que no sea null
         if(nombres == null){
@@ -109,7 +170,8 @@ public class ClienteBO implements IClienteBO {
       public boolean validarFechaNacimiento(LocalDate fecha) {
         return fecha.isBefore(LocalDate.now()); 
     }
-    
+
+  
     }
     
 
