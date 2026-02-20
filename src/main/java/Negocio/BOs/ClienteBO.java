@@ -29,7 +29,7 @@ public class ClienteBO implements IClienteBO {
     
 
     @Override
-    public Cliente insertarCliente(Cliente cliente) throws negocioException {
+    public  Cliente insertarCliente(Cliente cliente) throws negocioException {
          // aplicar todas las reglas de negocio para consultar un negocio
         // 1. validar que el objeto NO sea nulo
         if(cliente == null){
@@ -77,7 +77,7 @@ public class ClienteBO implements IClienteBO {
             throw new negocioException("El tecnico no puede tener un id ya asignado");
         }
      
-        
+        return cliente;
     }
     
        

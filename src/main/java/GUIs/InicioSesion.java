@@ -69,17 +69,17 @@ public class InicioSesion extends JFrame {
         centro.add(Box.createVerticalStrut(50));
         
         //para meter el telefono (hay que ver si usaremos nombres de usuario)
-        JLabel cphone = new JLabel("Telefono");
-        cphone.setFont(new Font("Serif", Font.BOLD, 20));
-        cphone.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(cphone);
+        JLabel nU = new JLabel("Nombre de usuario");
+        nU.setFont(new Font("Serif", Font.BOLD, 20));
+        nU.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(nU);
         
         
-        JTextField telefono = new JTextField("");
-        telefono.setFont(new Font("Serif", Font.BOLD, 20));
-        telefono.setMaximumSize(new Dimension(400, 50));
-        telefono.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(telefono);
+        JTextField nombreUsuario = new JTextField("");
+        nombreUsuario.setFont(new Font("Serif", Font.BOLD, 20));
+        nombreUsuario.setMaximumSize(new Dimension(400, 50));
+        nombreUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(nombreUsuario);
         centro.add(Box.createVerticalStrut(40));
         
         //para la contraseña
