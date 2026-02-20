@@ -134,5 +134,17 @@ public class InicioSesion extends JFrame {
         dispose();
 
         });
+        
+        //action listener que lleva a la pantalla de opciones cliente
+        iniciar.addActionListener(e -> {
+
+        //abre la ventana de opciones cliente
+        opcionesUsuario oU = new opcionesUsuario();
+        oU.setVisible(true);
+
+        //cierra esta ventana
+        dispose();
+
+        });
     }
 }

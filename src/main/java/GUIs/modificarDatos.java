@@ -23,8 +23,9 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  *
  * @author luiscarlosbeltran
  */
-public class registroClientes extends JFrame {
-    public registroClientes() {
+public class modificarDatos extends JFrame {
+    
+    public modificarDatos() {
 
         setTitle("pantalla inicio sesion");
         setSize(700, 1000);
@@ -175,19 +176,20 @@ public class registroClientes extends JFrame {
         abajo.setBackground(new Color(200, 200, 200));
 
 
-        JButton crearCuenta = new JButton("Crear Cuenta");
-        crearCuenta.setFont(new Font("Serif", Font.BOLD, 24));
-        crearCuenta.setBackground(new Color(70, 150, 220));
-        crearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
-        crearCuenta.setMaximumSize(new Dimension(450, 60));
+        JButton confirmar = new JButton("Confirmar");
+        confirmar.setFont(new Font("Serif", Font.BOLD, 24));
+        confirmar.setBackground(new Color(70, 150, 220));
+        confirmar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        confirmar.setMaximumSize(new Dimension(450, 60));
 
-        abajo.add(crearCuenta);
+        abajo.add(confirmar);
 
         add(abajo, BorderLayout.SOUTH);
         
+        
          
         //action listener que lleva a la pantalla de opciones cliente
-        crearCuenta.addActionListener(e -> {
+        confirmar.addActionListener(e -> {
 
         //abre la ventana de opciones cliente
         opcionesUsuario oU = new opcionesUsuario();
