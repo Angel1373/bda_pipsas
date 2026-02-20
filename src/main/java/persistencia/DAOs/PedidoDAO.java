@@ -61,7 +61,7 @@ public class PedidoDAO implements IPedidoDAO {
                 }
             }
 
-            LOG.log(Level.INFO, "Pedido insertado con éxito. ID: {0}", pedido.getIdPedido());
+            LOG.log(Level.INFO, "Pedido insertado con exito. ID: {0}", pedido.getIdPedido());
             return pedido;
 
         } catch (SQLException ex) {
