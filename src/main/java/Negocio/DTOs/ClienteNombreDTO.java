@@ -46,6 +46,12 @@ public class ClienteNombreDTO {
     public void setApellidoMaterno(String apellidoMaterno) {
         this.apellidoMaterno = apellidoMaterno;
     }
+
+    @Override
+    public String toString() {
+        return "ClienteNombreDTO{" + "nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + '}';
+    }
+    
     
     
     
