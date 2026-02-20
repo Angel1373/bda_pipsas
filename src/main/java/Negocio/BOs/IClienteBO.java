@@ -4,10 +4,15 @@
  */
 package Negocio.BOs;
 
+import Negocio.Excepciones.negocioException;
+import persistencia.Dominio.Cliente;
+
 /**
  *
  * @author Usuario
  */
 public interface IClienteBO {
+    
+    public Cliente insertarCliente(Cliente cliente) throws negocioException;
     
 }
