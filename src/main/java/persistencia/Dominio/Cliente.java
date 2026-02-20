@@ -12,39 +12,65 @@ import java.time.LocalDate;
  */
 public class Cliente {
     
+   
+   
     private Integer idCliente;
     private String nombres;
     private String apellidoPaterno;
     private String apellidoMaterno;
+    private EstadoCliente estado;
+    private String usuario;
     private LocalDate fechaNacimiento;
-    private int edad;
+    private Integer edad;
     private String contrasena;
-    private int idDomicilio;
-
-    public Cliente(Integer idCliente, String nombres, String apellidoPaterno, String apellidoMaterno,LocalDate fechaNacimiento, int edad, String contrasena ,int idDomicilio) {
-        this.idCliente = idCliente;
-        this.nombres = nombres;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.fechaNacimiento = fechaNacimiento;
-        this.edad = edad;
-        this.contrasena = contrasena;
-        this.idDomicilio = idDomicilio;
-    }
-
-    public Cliente(String nombres, String apellidoPaterno, String apellidoMaterno, LocalDate fechaNacimiento, int edad,String contrasena, int idDomicilio) {
-        this.nombres = nombres;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.fechaNacimiento = fechaNacimiento;
-        this.edad = edad;
-        this.contrasena = contrasena;
-        this.idDomicilio = idDomicilio;
-    }
+    private Integer idDomicilio;
 
     public Cliente() {
     }
 
+    public Cliente(String nombres, String apellidoPaterno, String apellidoMaterno, EstadoCliente estado, String usuario, LocalDate fechaNacimiento, Integer edad, String contrasena, Integer idDomicilio) {
+        this.nombres = nombres;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.fechaNacimiento = fechaNacimiento;
+        this.edad = edad;
+        this.contrasena = contrasena;
+        this.idDomicilio = idDomicilio;
+    }
+    
+    
+    
+    public Cliente(Integer idCliente, String nombres, String apellidoPaterno, String apellidoMaterno, EstadoCliente estado, String usuario,LocalDate fechaNacimiento, Integer edad,String contrasena, Integer idDomicilio) {
+        this.idCliente = idCliente;
+        this.nombres = nombres;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.fechaNacimiento = fechaNacimiento;
+        this.edad = edad;
+        this.contrasena = contrasena;
+        this.idDomicilio = idDomicilio;
+    }
+
+    
+    public enum EstadoCliente {
+
+    ACTIVO("activo"),
+    INACTIVO("inactivo");
+
+    private final String valor;
+
+    EstadoCliente(String valor) {
+        this.valor = valor;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+    }
     public Integer getIdCliente() {
         return idCliente;
     }
@@ -52,8 +78,6 @@ public class Cliente {
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
-
-   
 
     public String getNombres() {
         return nombres;
@@ -79,6 +103,23 @@ public class Cliente {
         this.apellidoMaterno = apellidoMaterno;
     }
 
+    public EstadoCliente getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoCliente estado) {
+        this.estado = estado;
+    }
+
+    
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
 
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
@@ -88,11 +129,11 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public int getEdad() {
+    public Integer getEdad() {
         return edad;
     }
 
-    public void setEdad(int edad) {
+    public void setEdad(Integer edad) {
         this.edad = edad;
     }
 
@@ -104,19 +145,11 @@ public class Cliente {
         this.contrasena = contrasena;
     }
 
-    
-    public int getIdDomicilio() {
+    public Integer getIdDomicilio() {
         return idDomicilio;
     }
 
-    public void setIdDomicilio(int idDomicilio) {
+    public void setIdDomicilio(Integer idDomicilio) {
         this.idDomicilio = idDomicilio;
     }
-
-    @Override
-    public String toString() {
-        return "Cliente{" + "idCliente=" + idCliente + ", nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno  + ", fechaNacimiento=" + fechaNacimiento + ", edad=" + edad + ", idDomicilio=" + idDomicilio + '}';
-    }
-    
-    
 }

@@ -40,7 +40,6 @@ public class Pedido {
     public enum estadoPedido {
 
         PENDIENTE("pendiente"),
-        EN_PREPARACION("en preparacion"),
         LISTO("listo"),
         ENTREGADO("entregado"),
         CANCELADO("cancelado"),

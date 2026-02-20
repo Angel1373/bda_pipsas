@@ -5,6 +5,7 @@
 package persistencia.DAOs;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,55 +34,48 @@ public class ClienteDAO implements IClienteDAO{
     // Metodo para agregar un cliente con un insert
     @Override
     public Cliente agregarCliente(Cliente cliente) throws persistenciaException {
-        
-        
-        String comandoSQL = """
-                            INSERT INTO clientes (nombres, apellido_paterno, apellido_materno, fecha_nacimiento,contrasena,id_domicilio)
-                            VALUES (?,?,?,?,?,?)
-                            """;
+            String sql = """
+             INSERT INTO clientes
+             (nombres, apellido_paterno, apellido_materno, estado, usuario,
+              fecha_nacimiento, edad, contrasena, id_domicilio)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+             """;
 
-        try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL, Statement.RETURN_GENERATED_KEYS)) {
+         try (
+             Connection conn = conexionBD.CrearConexion();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+         ) {
 
-            ps.setString(1, cliente.getNombres());
-            ps.setString(2, cliente.getApellidoPaterno());
+             ps.setString(1, cliente.getNombres());
+             ps.setString(2, cliente.getApellidoPaterno());
+             ps.setString(3, cliente.getApellidoMaterno());
 
-            if (cliente.getApellidoMaterno() != null) {
-                ps.setString(3, cliente.getApellidoMaterno());
-            } else {
-                ps.setNull(3, Types.VARCHAR);
-            }  
-                ps.setDate(4, java.sql.Date.valueOf(cliente.getFechaNacimiento()));
-           
-                ps.setString(5, cliente.getContrasena());
-                ps.setInt(6, cliente.getIdDomicilio());
-                
-                //ejecutamos el comando usando el preparedStatement
-            int filasInsertadas = ps.executeUpdate();
-            
-            // == 0 si no se registro nada y == 1 si se registro 
-            if (filasInsertadas == 0) {
-                LOG.log(Level.WARNING, "No se pudo insertar al cliente: {0}", cliente);
-                throw new persistenciaException("No se pudo insertar al cliente.");
-            }
-            //obtenemos el id generado automaticamente y lo leemos con el rs
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    //obtenemos la primera columna que es el id generado y se lo ponemos al cliente
-                    // se obtiene el id generado por el insert del metodo por la base de datos lo creo
-                    cliente.setIdCliente(rs.getInt(1));
-                } else {
-                    throw new persistenciaException("Error al obtener el ID generado del nuevo cliente.");
-                }
-            }
+             // tomamos el valor del enum con el get valor
+             ps.setString(4, cliente.getEstado().getValor());
 
-            LOG.log(Level.INFO, "Cliente insertado con éxito. ID: {0}", cliente.getIdCliente());
-            return cliente;
+             ps.setString(5, cliente.getUsuario());
+             ps.setDate(6, Date.valueOf(cliente.getFechaNacimiento()));
+             ps.setInt(7, cliente.getEdad());
+             ps.setString(8, cliente.getContrasena());
+             ps.setInt(9, cliente.getIdDomicilio());
 
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error de SQL al insertar al cliente", ex);
-            throw new persistenciaException("No se pudo agregar al cliente");
-        }
-        
-    }
+             int filas = ps.executeUpdate();
+
+             if (filas == 0) {
+                 throw new persistenciaException("No se insertó el cliente");
+             }
+
+             try (ResultSet rs = ps.getGeneratedKeys()) {
+                 if (rs.next()) {
+                     cliente.setIdCliente(rs.getInt(1));
+                 }
+             }
+
+             return cliente;
+
+         } catch (SQLException e) {
+             throw new persistenciaException("Error al insertar cliente", e);
+         }
+     }
     
 }
