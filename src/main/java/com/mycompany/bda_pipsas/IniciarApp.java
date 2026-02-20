@@ -17,6 +17,7 @@ public class IniciarApp {
         PantallaPrincipal ventana = new PantallaPrincipal();
         ventana.setVisible(true);
         
+   
 
     }
 }

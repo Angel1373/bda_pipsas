@@ -4,12 +4,15 @@
  */
 package Negocio.BOs;
 
+import Negocio.DTOs.UsuarioDTO;
 import Negocio.Excepciones.negocioException;
 import java.time.LocalDate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import persistencia.DAOs.IClienteDAO;
+import persistencia.DAOs.IDomicilioDAO;
+import persistencia.DAOs.IUsuarioDAO;
 import persistencia.Dominio.Cliente;
 
 /**
@@ -19,11 +22,14 @@ import persistencia.Dominio.Cliente;
 public class ClienteBO implements IClienteBO {
     
     private IClienteDAO clienteDAO;
-    
+    private IUsuarioDAO usuarioDAO;
+    private IDomicilioDAO domicilioDAO;
     // constructor para mandar a llamar al DAO
     public ClienteBO(IClienteDAO cliente){
        this.clienteDAO = cliente; 
     }
+    
+    
     private static final Logger LOG = Logger.getLogger(ClienteBO.class.getName());
 
     
@@ -56,17 +62,17 @@ public class ClienteBO implements IClienteBO {
              throw new negocioException("El apellido materno es inválido");
         }
         //6. validamos el estado 
-         if(cliente.getEstado()!=null){
+         if(cliente.getEstado()== null){
             LOG.warning("El cliente no puede no tener un estado");
             throw new negocioException("El estado es invalido");
         }
-         //6. validamos el usuario
-          if(cliente.getUsuario()!=null){
+         //7. validamos el usuario
+          if(cliente.getUsuario()==null){
             LOG.warning("El cliente no puede no tener un usuario");
             throw new negocioException("El cliente no puede tener un usuario");
         }
  
-        //7. Validamos fecha de nacimiento 
+        //8. Validamos fecha de nacimiento 
         if(!validarFechaNacimiento(cliente.getFechaNacimiento())){
             LOG.warning("No se pudo registrar la fecha");
             throw new negocioException("Se ingreso una fecha futura o menor a 2020");
@@ -76,8 +82,14 @@ public class ClienteBO implements IClienteBO {
             LOG.warning("El tecnico no puede tener un id ya asignado");
             throw new negocioException("El tecnico no puede tener un id ya asignado");
         }
-     
-        return cliente;
+     // mapear de DTO a entityclass
+     Cliente clienteNuevo = new Cliente();
+     clienteNuevo.setNombres(cliente.getNombres());
+     clienteNuevo.setApellidoPaterno(cliente.getApellidoPaterno());
+     clienteNuevo.setApellidoMaterno(cliente.getApellidoMaterno());
+     clienteNuevo.setEstado(cliente.getEstado().getValor());
+     clienteNuevo.setUsuario(cliente.getUsuario());
+     clienteNuevo.setFechaNacimiento(cliente.getFechaNacimiento());
     }
     
        

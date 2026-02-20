@@ -9,6 +9,7 @@ package Negocio.DTOs;
  * @author Gael Galaviz
  */
 public class UsuarioDTO {
+    private int idUsuario;
     private String usuario;
     private String contrasena;
 
@@ -16,6 +17,22 @@ public class UsuarioDTO {
         this.usuario = usuario;
         this.contrasena = contrasena;
     }
+
+    public UsuarioDTO(int idUsuario, String usuario, String contrasena) {
+        this.idUsuario = idUsuario;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
 
     public UsuarioDTO() {
     }
