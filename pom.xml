@@ -8,6 +8,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>23</maven.compiler.release>
-        <exec.mainClass>com.mycompany.bda_pipsas.Bda_pipsas</exec.mainClass>
+        <exec.mainClass>com.mycompany.bda_pipsas.IniciarApp</exec.mainClass>
     </properties>
 </project>
