@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -47,11 +48,10 @@ public class modificarDatos extends JFrame {
         
 
         
-        //--- parte del centro ---
-        JPanel centro = new JPanel();
-        centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
-        
-        
+        //parte del centro
+
+        JPanel centro = new JPanel(new GridLayout(0, 2, 15, 15));
+
         //para meter nombres
         JLabel n = new JLabel("Nombres");
         n.setFont(new Font("Serif", Font.BOLD, 20));
@@ -63,8 +63,7 @@ public class modificarDatos extends JFrame {
         nombres.setMaximumSize(new Dimension(400, 50));
         nombres.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(nombres);
-        centro.add(Box.createVerticalStrut(15));
-        
+
         //para meter apellido paterno
         JLabel ap = new JLabel("Apellido Paterno");
         ap.setFont(new Font("Serif", Font.BOLD, 20));
@@ -76,8 +75,7 @@ public class modificarDatos extends JFrame {
         aPaterno.setMaximumSize(new Dimension(400, 50));
         aPaterno.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(aPaterno);
-        centro.add(Box.createVerticalStrut(15));
-        
+
         //para meter apellido materno (opcional)
         JLabel am = new JLabel("Apellido Materno (Opcional)");
         am.setFont(new Font("Serif", Font.BOLD, 20));
@@ -89,48 +87,25 @@ public class modificarDatos extends JFrame {
         aMaterno.setMaximumSize(new Dimension(400, 50));
         aMaterno.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(aMaterno);
-        centro.add(Box.createVerticalStrut(15));
-        
-        //esta parte sera especial, para meter datos de la direccion de envio (opcionales)
-        //primero va calle (opcional)
-        JLabel calleLabel = new JLabel("Calle (opcional)");
-        calleLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        calleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(calleLabel);
 
-        JTextField calle = new JTextField("");
-        calle.setFont(new Font("Serif", Font.BOLD, 20));
-        calle.setMaximumSize(new Dimension(400, 50));
-        calle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(calle);
-        centro.add(Box.createVerticalStrut(15));
+        //para la fecha de nacimiento
+        JLabel fechanacimientoLabel = new JLabel("Fecha de Nacimiento");
+        fechanacimientoLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        JTextField fechanacimiento = new JTextField();
+        fechanacimiento.setFont(new Font("Serif", Font.BOLD, 20));
 
-        //numero (opcional)
-        JLabel numeroLabel = new JLabel("Numero (opcional)");
-        numeroLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        numeroLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(numeroLabel);
+        centro.add(fechanacimientoLabel);
+        centro.add(fechanacimiento);
 
-        JTextField numero = new JTextField("");
-        numero.setFont(new Font("Serif", Font.BOLD, 20));
-        numero.setMaximumSize(new Dimension(400, 50));
-        numero.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(numero);
-        centro.add(Box.createVerticalStrut(15));
+        //para la edad
+        JLabel edadLabel = new JLabel("Edad");
+        edadLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        JTextField edad = new JTextField();
+        edad.setFont(new Font("Serif", Font.BOLD, 20));
 
-        //colonia (opcional)
-        JLabel coloniaLabel = new JLabel("Colonia (opcional)");
-        coloniaLabel.setFont(new Font("Serif", Font.BOLD, 20));
-        coloniaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(coloniaLabel);
+        centro.add(edadLabel);
+        centro.add(edad);
 
-        JTextField colonia = new JTextField("");
-        colonia.setFont(new Font("Serif", Font.BOLD, 20));
-        colonia.setMaximumSize(new Dimension(400, 50));
-        colonia.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(colonia);
-        centro.add(Box.createVerticalStrut(15));
-        
         //para meter el telefono(s)
         JLabel cphone = new JLabel("Telefono(s)");
         cphone.setFont(new Font("Serif", Font.BOLD, 20));
@@ -142,8 +117,54 @@ public class modificarDatos extends JFrame {
         telefono.setMaximumSize(new Dimension(400, 50));
         telefono.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(telefono);
-        centro.add(Box.createVerticalStrut(15));
+
+        //para poner la etiqueta de dl telefono
+        JLabel etiquetaTelefonoLabel = new JLabel("Etiqueta de Teléfono");
+        etiquetaTelefonoLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        JTextField etiquetaTelefono = new JTextField();
+        etiquetaTelefono.setFont(new Font("Serif", Font.BOLD, 20));
+
+        centro.add(etiquetaTelefonoLabel);
+        centro.add(etiquetaTelefono);
+
+        //calle (opcional)
+        JLabel calleLabel = new JLabel("Calle (opcional)");
+        calleLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        calleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(calleLabel);
+        centro.add(calleLabel);
         
+        JTextField calle = new JTextField("");
+        calle.setFont(new Font("Serif", Font.BOLD, 20));
+        calle.setMaximumSize(new Dimension(400, 50));
+        calle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(calle);
+
+        //colonia (opcional)
+        JLabel coloniaLabel = new JLabel("Colonia (opcional)");
+        coloniaLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        coloniaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(coloniaLabel);
+        
+        JTextField colonia = new JTextField("");
+        colonia.setFont(new Font("Serif", Font.BOLD, 20));
+        colonia.setMaximumSize(new Dimension(400, 50));
+        colonia.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(colonia);
+
+        //numero (opcional)
+        JLabel numeroLabel = new JLabel("Numero (opcional)");
+        numeroLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        numeroLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(numeroLabel);
+        centro.add(numeroLabel);
+        
+        JTextField numero = new JTextField("");
+        numero.setFont(new Font("Serif", Font.BOLD, 20));
+        numero.setMaximumSize(new Dimension(400, 50));
+        numero.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(numero);
+
         //para nombre de usuario
         JLabel nu = new JLabel("Nombre de Usuario");
         nu.setFont(new Font("Serif", Font.BOLD, 20));
@@ -155,8 +176,7 @@ public class modificarDatos extends JFrame {
         nombreU.setMaximumSize(new Dimension(400, 50));
         nombreU.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(nombreU);
-        centro.add(Box.createVerticalStrut(15));
-        
+
         //para la contraseña
         JLabel contra = new JLabel("Contraseña");
         contra.setFont(new Font("Serif", Font.BOLD, 20));
@@ -169,27 +189,35 @@ public class modificarDatos extends JFrame {
         contraseña.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(contraseña);
         
+        //para poner estado
+        JLabel estadoLabel = new JLabel("Estado");
+        estadoLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        JTextField estado = new JTextField();
+        estado.setFont(new Font("Serif", Font.BOLD, 20));
+
+        centro.add(estadoLabel);
+        centro.add(estado);
+
         add(centro, BorderLayout.CENTER);
-        
+      
         //------ parte de abajo ------
         JPanel abajo = new JPanel();
         abajo.setBackground(new Color(200, 200, 200));
 
 
-        JButton confirmar = new JButton("Confirmar");
-        confirmar.setFont(new Font("Serif", Font.BOLD, 24));
-        confirmar.setBackground(new Color(70, 150, 220));
-        confirmar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        confirmar.setMaximumSize(new Dimension(450, 60));
+        JButton crearCuenta = new JButton("Confirmar");
+        crearCuenta.setFont(new Font("Serif", Font.BOLD, 24));
+        crearCuenta.setBackground(new Color(70, 150, 220));
+        crearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
+        crearCuenta.setMaximumSize(new Dimension(450, 60));
 
-        abajo.add(confirmar);
+        abajo.add(crearCuenta);
 
         add(abajo, BorderLayout.SOUTH);
         
-        
          
         //action listener que lleva a la pantalla de opciones cliente
-        confirmar.addActionListener(e -> {
+        crearCuenta.addActionListener(e -> {
 
         //abre la ventana de opciones cliente
         opcionesUsuario oU = new opcionesUsuario();

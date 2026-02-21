@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class ConexionBD implements IConexionBD {
     
-     private final String CADENA_CONEXION = "jdbc:mysql://localhost:3306/bda_pipsas";
+     private final String CADENA_CONEXION = "jdbc:mysql://localhost/bda_pipsas";
 
     /**
      * Usuario de la base de datos.
@@ -24,7 +24,7 @@ public class ConexionBD implements IConexionBD {
     /**
      * Contraseña asociada al usuario de la base de datos.
      */
-    private final String CONTRASENIA = "Relacional@";
+    private final String CONTRASENIA = "lopez";
 
     /**
      * Crea y retorna una conexión activa con la base de datos.

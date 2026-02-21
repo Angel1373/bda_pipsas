@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -30,7 +31,7 @@ public class menuProgramado extends JFrame {
 
     private ConexionBD conexion;
 
-    public menuProgramado() {
+    public menuProgramado() throws SQLException {
         conexion = new ConexionBD();
         
 
@@ -38,6 +39,7 @@ public class menuProgramado extends JFrame {
         setSize(700, 900);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         //---- parte de lo azul que va arriba ----
         JPanel arriba = new JPanel();
@@ -76,9 +78,12 @@ public class menuProgramado extends JFrame {
         add(abajo, BorderLayout.SOUTH);
 
         setVisible(true);
+        
+        
     }
-
-    private void cargarPizzas(JPanel panel) {
+    
+    // metodo que selecciona solo pizzas disponibles 
+    private void cargarPizzas(JPanel panel) throws SQLException {
 
         try (Connection con = conexion.CrearConexion()) {
 
@@ -99,23 +104,20 @@ public class menuProgramado extends JFrame {
                 panel.add(Box.createVerticalStrut(20));
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private JPanel crearTarjeta(String nombre, String tamano,
-                                String descripcion, double precio) {
+        } 
+        
+    } 
+    
+    //crea una tarjetita, apartado para mostrar informacion de una pizza
+    private JPanel crearTarjeta(String nombre, String tamano, String descripcion, double precio) {
 
         JPanel tarjeta = new JPanel();
         tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
         tarjeta.setMaximumSize(new Dimension(600, 150));
         tarjeta.setBackground(Color.WHITE);
+        tarjeta.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        tarjeta.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
+        tarjeta.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
         JLabel lblNombre = new JLabel(nombre + " - " + tamano);
         lblNombre.setFont(new Font("Serif", Font.BOLD, 20));
@@ -123,8 +125,8 @@ public class menuProgramado extends JFrame {
         JLabel lblDescripcion = new JLabel(descripcion);
         JLabel lblPrecio = new JLabel("Precio: $" + precio);
 
-        JButton agregar = new JButton("Agregar al pedido");
-        agregar.setBackground(new Color(100, 200, 120));
+        JButton verDetalles = new JButton("Ver detalles");
+        verDetalles.setBackground(new Color(100, 200, 120));
 
         tarjeta.add(lblNombre);
         tarjeta.add(Box.createVerticalStrut(5));
@@ -132,10 +134,28 @@ public class menuProgramado extends JFrame {
         tarjeta.add(Box.createVerticalStrut(5));
         tarjeta.add(lblPrecio);
         tarjeta.add(Box.createVerticalStrut(10));
-        tarjeta.add(agregar);
+        tarjeta.add(verDetalles);
+        
+        //actionlistener del boton de ver detalles pizza, adentro de esta misma tarjeta
+        verDetalles.addActionListener(e -> {
 
+        //abre la ventana de detallespiza
+        DetallePizza dp = new DetallePizza(nombre, tamano, descripcion, precio);
+        dp.setVisible(true);
+
+        //cierra esta ventana
+        menuProgramado.this.dispose();
+        });
+        
         return tarjeta;
         
         
+
+        
+        
+        
+        
+        
     }
+    
 }

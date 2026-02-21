@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.SQLException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -112,16 +113,21 @@ public class opcionesUsuario extends JFrame {
         add(abajo, BorderLayout.SOUTH);
         
         //action listener de realizar pedido
+        
         pedido.addActionListener(e -> {
 
         //abre la ventana de menuProgramado
+        try{
         menuProgramado mP = new menuProgramado();
         mP.setVisible(true);
 
         //cierra esta ventana
         dispose();
-
+        } catch (SQLException ex){
+            
+        }
         });
+
         
         //action listener de modificar datos
         modidatos.addActionListener(e -> {
