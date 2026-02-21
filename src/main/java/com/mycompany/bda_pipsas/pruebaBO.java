@@ -6,18 +6,23 @@ package com.mycompany.bda_pipsas;
 
 import Negocio.BOs.ClienteBO;
 import Negocio.BOs.IClienteBO;
+import Negocio.BOs.PedidoBO;
 import Negocio.DTOs.ClienteCompletoDTO;
+import Negocio.DTOs.PedidoDTO;
 import Negocio.Excepciones.negocioException;
 import java.time.LocalDate;
 import persistencia.DAOs.ClienteDAO;
 import persistencia.DAOs.DomicilioDAO;
 import persistencia.DAOs.IClienteDAO;
 import persistencia.DAOs.IDomicilioDAO;
+import persistencia.DAOs.IPedidoDAO;
 import persistencia.DAOs.ITelefonoDAO;
 import persistencia.DAOs.IUsuarioDAO;
+import persistencia.DAOs.PedidoDAO;
 import persistencia.DAOs.TelefonoDAO;
 import persistencia.DAOs.UsuarioDAO;
 import persistencia.Dominio.Cliente;
+import persistencia.Dominio.Pedido;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
@@ -39,9 +44,12 @@ IConexionBD conexion = new ConexionBD();
     IUsuarioDAO usuarioDAO = new UsuarioDAO(conexion);
     IDomicilioDAO domicilioDAO = new DomicilioDAO(conexion);
     ITelefonoDAO telefonoDAO = new TelefonoDAO(conexion);
+    IPedidoDAO pedidoDAO = new PedidoDAO(conexion);
 
     ClienteBO clienteBO = new ClienteBO(clienteDAO, usuarioDAO, domicilioDAO, telefonoDAO);
-
+    PedidoBO pedidoBO = new PedidoBO(pedidoDAO);
+    
+    //Cliente
     ClienteCompletoDTO dto = new ClienteCompletoDTO();
     dto.setNombres("Juan");
     dto.setApellidoPaterno("Perez");
@@ -65,5 +73,16 @@ IConexionBD conexion = new ConexionBD();
     } catch (negocioException e) {
         System.out.println("Error: " + e.getMessage());
     }
-}
+    // Pedido
+    PedidoDTO pedidoDTO = new PedidoDTO();
+    pedidoDTO.setEstado("pendiente");
+    pedidoDTO.setNotas("Pizza pepperoni con extra queso");
+    pedidoDTO.setCosto(199.99);
+    
+        try {Pedido pedidoGuardado = pedidoBO.insertarPedido(pedidoDTO);
+        System.out.println( "Pedido guardado con ID: " + pedidoGuardado.getIdPedido());
+        } catch (negocioException e) {
+            System.out.println("Error pedido: " + e.getMessage());
+        }
+    }
 }
