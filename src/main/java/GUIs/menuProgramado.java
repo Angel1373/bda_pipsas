@@ -79,7 +79,11 @@ public class menuProgramado extends JFrame {
 
         setVisible(true);
         
-        
+        //actionlisterer del boton para ver el pedido
+        verPedido.addActionListener(e -> {
+            new MiPedido();
+            dispose();
+        });
     }
     
     // metodo que selecciona solo pizzas disponibles 
@@ -147,15 +151,7 @@ public class menuProgramado extends JFrame {
         menuProgramado.this.dispose();
         });
         
-        return tarjeta;
-        
-        
-
-        
-        
-        
-        
-        
+        return tarjeta; 
     }
     
 }

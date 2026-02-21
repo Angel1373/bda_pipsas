@@ -4,6 +4,8 @@
  */
 package GUIs;
 
+import Negocio.DTOs.DetallePedidoDTO;
+import Negocio.DTOs.PizzaDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -17,10 +19,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import persistencia.Dominio.PedidoActual;
 
 /**
  *
@@ -139,6 +143,7 @@ public class DetallePizza extends JFrame {
 
         setVisible(true);
         
+        //action listenr del boton de volver
         volver.addActionListener(e -> {
 
         //abre la ventana de menuProgramado
@@ -151,6 +156,39 @@ public class DetallePizza extends JFrame {
         } catch (SQLException ex){
             
         }
+        });
+        
+        //actionlistener del boton agregar
+        agregar.addActionListener(e -> {
+
+            int cantidad = Integer.parseInt(txtCantidad.getText());
+
+            JTextArea areaNotas = (JTextArea) gridCentral.getComponent(2);
+            String notas = areaNotas.getText();
+
+            PizzaDTO pizzaDTO = new PizzaDTO();
+            pizzaDTO.setNombre(nombre);
+            pizzaDTO.setTamano(tamano);
+            pizzaDTO.setDescripcion(descripcion);
+            pizzaDTO.setPrecio(precio);
+            pizzaDTO.setDisponible(true);
+
+            DetallePedidoDTO detalle = new DetallePedidoDTO();
+            detalle.setPizza(pizzaDTO);
+            detalle.setCantidad(cantidad);
+            detalle.setNotas(notas);
+
+            PedidoActual.agregarDetalle(detalle);
+
+            JOptionPane.showMessageDialog(this, "Pizza agregada al pedido");
+
+            //
+            try {
+                new menuProgramado().setVisible(true);
+                dispose();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         });
     }
 }
