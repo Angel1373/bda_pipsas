@@ -38,7 +38,7 @@ public class pruebaBO {
     public static void main(String[] args) {
         
 
-IConexionBD conexion = new ConexionBD();
+    IConexionBD conexion = new ConexionBD();
 
     IClienteDAO clienteDAO = new ClienteDAO(conexion);
     IUsuarioDAO usuarioDAO = new UsuarioDAO(conexion);

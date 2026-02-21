@@ -4,12 +4,21 @@
  */
 package GUIs;
 
+import Negocio.BOs.ClienteBO;
+import Negocio.BOs.IClienteBO;
+import Negocio.DTOs.ClienteCompletoDTO;
+import Negocio.Excepciones.negocioException;
+import fabricaClienteBO.registrarCliente;
+import static fabricaClienteBO.registrarCliente.registrarCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,6 +28,19 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import persistencia.DAOs.ClienteDAO;
+import persistencia.DAOs.DomicilioDAO;
+import persistencia.DAOs.IClienteDAO;
+import persistencia.DAOs.IDomicilioDAO;
+import persistencia.DAOs.IPedidoDAO;
+import persistencia.DAOs.ITelefonoDAO;
+import persistencia.DAOs.IUsuarioDAO;
+import persistencia.DAOs.PedidoDAO;
+import persistencia.DAOs.TelefonoDAO;
+import persistencia.DAOs.UsuarioDAO;
+import persistencia.Dominio.Cliente;
+import persistencia.conexion.ConexionBD;
+import persistencia.conexion.IConexionBD;
 
 /**
  *
@@ -26,7 +48,11 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class registroClientes extends JFrame {
     public registroClientes() {
+        
+        IConexionBD conexion = new ConexionBD();
 
+        // llamamos al metodo para crear el BO con los DAOs para no usarlos en el GUI
+        ClienteBO clienteBO = registrarCliente.registrarCliente();
         setTitle("pantalla inicio sesion");
         setSize(700, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -217,7 +243,39 @@ public class registroClientes extends JFrame {
          
         //action listener que lleva a la pantalla de opciones cliente
         crearCuenta.addActionListener(e -> {
+          try{
+         ClienteCompletoDTO nuevoCliente = new ClienteCompletoDTO();
+         nuevoCliente.setUsuario(nombreU.getText().trim());
+         nuevoCliente.setContrasena(contraseña.getText().trim());
+         nuevoCliente.setNombres(nombres.getText().trim());
+         nuevoCliente.setApellidoPaterno(aPaterno.getText().trim());
+         nuevoCliente.setApellidoMaterno(aMaterno.getText().trim());
+         // hacemos localdate el string
+         LocalDate fecha = LocalDate.parse(fechanacimiento.getText());
+         nuevoCliente.setFechaNacimiento(fecha);
+         // recibimos la edad en texto y la hacemos integer
+         String edadTexto = edad.getText().trim();
+         int edadInteger = Integer.parseInt(edadTexto);
+         nuevoCliente.setEdad(edadInteger);
+         
+         //obtenemos el estadoLabel quitamos espacios y lo hacemos minusculas por que asi lo hice en la clase cliente
+         // en el value of busca un estado igual al que el cliente puso y lo convierte a enum
+         Cliente.EstadoCliente estadoNuevo = Cliente.EstadoCliente.valueOf(estado.getText().trim().toUpperCase());
+         nuevoCliente.setEstado(estadoNuevo);
+         
+         nuevoCliente.setNumeroTelefono(telefono.getText().trim());
+         nuevoCliente.setEtiqueta(etiquetaTelefono.getText().trim());
+         nuevoCliente.setCalle(calle.getText().trim());
+         nuevoCliente.setColonia(colonia.getText().trim());
+         nuevoCliente.setNumeroCasa(numero.getText().trim());
 
+        
+            
+                clienteBO.insertarCliente(nuevoCliente);
+            } catch (negocioException ex) {
+                Logger.getLogger("Error al insertar al cliente");
+              
+            }
         //abre la ventana de opciones cliente
         opcionesUsuario oU = new opcionesUsuario();
         oU.setVisible(true);

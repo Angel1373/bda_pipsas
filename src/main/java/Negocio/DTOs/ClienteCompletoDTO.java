@@ -137,6 +137,8 @@ public class ClienteCompletoDTO {
         this.etiqueta = etiqueta;
     }
 
+    
+    
     public String getCalle() {
         return calle;
     }
