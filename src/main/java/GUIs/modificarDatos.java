@@ -12,6 +12,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.LocalDate;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import persistencia.Dominio.Cliente;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
@@ -227,6 +229,20 @@ public class modificarDatos extends JFrame {
          
         //action listener que lleva a la pantalla de opciones cliente
         crearCuenta.addActionListener(e -> {
+            
+        Cliente clienteModificar = new Cliente();
+        clienteModificar.setNombres(nombres.getText().trim());
+        clienteModificar.setApellidoPaterno(aPaterno.getText().trim());
+        clienteModificar.setApellidoMaterno(aMaterno.getText().trim());
+        // el texto de la fecha lo hacemos LocalDate
+         LocalDate fecha = LocalDate.parse(fechanacimiento.getText());
+         clienteModificar.setFechaNacimiento(fecha);
+         // recibimos la edad en texto y la hacemos integer
+         String edadTexto = edad.getText().trim();
+         int edadInteger = Integer.parseInt(edadTexto);
+         clienteModificar.setEdad(edadInteger);
+         clienteModificar.setEstado(Cliente.EstadoCliente.valueOf(estado.getText().trim().toUpperCase()));
+         
 
         //abre la ventana de opciones cliente
         opcionesUsuario oU = new opcionesUsuario();

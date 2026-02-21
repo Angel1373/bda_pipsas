@@ -58,6 +58,67 @@ public class TelefonoDAO implements ITelefonoDAO{
                 throw new persistenciaException("Error al insertar telefono", e);
             }
         }
+
+    @Override
+    public Telefono actualizarTelefono(Telefono telefono) throws persistenciaException {
+                String sql = "UPDATE telefonos SET numero = ?, etiqueta = ? WHERE id_telefono = ?";
+
+           try (Connection conn = conexionBD.CrearConexion();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+               ps.setString(1, telefono.getNumeroTelefono());
+               ps.setString(2, telefono.getEtiqueta());
+               ps.setInt(3, telefono.getId_telefono());
+
+               int filas = ps.executeUpdate();
+               if (filas == 0) {
+                   throw new persistenciaException("No se pudo actualizar el telefono");
+               }
+
+               return telefono;
+
+           } catch (SQLException e) {
+               throw new persistenciaException("Error al actualizar telefono", e);
+           }
+    }
+
+    @Override
+    public Telefono consultarTelefono(Telefono telefono) throws persistenciaException {
+                String sql = """
+                         SELECT id_telefono, numero, etiqueta, id_cliente
+                         FROM telefonos
+                         WHERE id_telefono = ?
+                         """;
+
+            try (Connection conn = conexionBD.CrearConexion();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, telefono.getId_telefono());
+
+                try (ResultSet rs = ps.executeQuery()) {
+
+                    if (!rs.next()) {
+                        throw new persistenciaException("No existe el telefono con ese ID");
+                    }
+
+                    return extraerTelefono(rs);
+                }
+
+            } catch (SQLException e) {
+                throw new persistenciaException("Error al consultar telefono", e);
+            }
+    }
+        private Telefono extraerTelefono(ResultSet rs) throws SQLException {
+
+            Telefono t = new Telefono();
+
+            t.setId_telefono(rs.getInt("id_telefono"));
+            t.setNumeroTelefono(rs.getString("numero"));
+            t.setEtiqueta(rs.getString("etiqueta"));
+            t.setId_cliente(rs.getInt("id_cliente"));
+
+        return t;
+    }
 }
     
 

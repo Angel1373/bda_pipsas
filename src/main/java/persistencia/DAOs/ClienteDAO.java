@@ -78,11 +78,9 @@ public class ClienteDAO implements IClienteDAO{
         try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL)) {
 
             ps.setString(1, cliente.getNombres());
-            ps.setString(2, cliente.getApellidoPaterno());
-            // pendiente agregar la parte de gestionar nulos seguros
+            ps.setString(2, cliente.getApellidoPaterno());    
             ps.setString(3, cliente.getApellidoMaterno());
             ps.setString(4, cliente.getEstado().getValor());
-            // pendiente agregar la parte de gestionar nulos seguros
             ps.setDate(5, java.sql.Date.valueOf(cliente.getFechaNacimiento()));
             ps.setInt(6, cliente.getEdad());
             ps.setInt(7, cliente.getIdCliente());
@@ -125,7 +123,8 @@ public class ClienteDAO implements IClienteDAO{
             throw new persistenciaException("No se pudo consultar ese cliente");
         }    
     }
-    
+    // esto es por que el result set devuelve valores pero aun no es un objeto
+    // sirve para tomar los datos y regresarlos como objeto y esto es para no tener que repetir todo
     private Cliente extraerCliente(ResultSet rs) throws SQLException{
         
     Cliente c = new Cliente();

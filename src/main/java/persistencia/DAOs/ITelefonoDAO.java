@@ -14,5 +14,7 @@ import persistencia.Excepciones.persistenciaException;
 public interface ITelefonoDAO {
     
     Telefono agregarTelefono(Telefono telefono) throws persistenciaException;
+    Telefono actualizarTelefono(Telefono telefono) throws persistenciaException;
+    Telefono consultarTelefono(Telefono telefono) throws persistenciaException;
     
 }

@@ -14,5 +14,7 @@ import persistencia.Excepciones.persistenciaException;
 public interface IDomicilioDAO {
     
     Domicilio agregarDomicilio(Domicilio domicilio) throws persistenciaException;
+    Domicilio actualizarDomicilio(Domicilio domicilio) throws persistenciaException;
+    Domicilio consultarDomicilio(Domicilio domicilio) throws persistenciaException;
     
 }
