@@ -84,5 +84,29 @@ public class pruebaBO {
         } catch (negocioException e) {
             System.out.println("Error pedido: " + e.getMessage());
         }
+    
+     try{
+        
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(1); 
+        cliente.setNombres("Angel");
+        cliente.setApellidoPaterno("Perez");
+        cliente.setApellidoMaterno("Gaxiola");
+        cliente.setEstado(Cliente.EstadoCliente.ACTIVO);
+        cliente.setFechaNacimiento(LocalDate.of(2000, 5, 10));
+        cliente.setEdad(25);
+
+     
+        Cliente actualizado = clienteBO.actualizarCliente(cliente);
+
+        System.out.println("Cliente actualizado: " + actualizado.getNombres());
+
+    } catch (negocioException e) {
+            System.out.println("error al actualizar el cliente");;
     }
 }
+}
+
+    
+
+

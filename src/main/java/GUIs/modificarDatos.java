@@ -4,6 +4,8 @@
  */
 package GUIs;
 
+import Negocio.BOs.ClienteBO;
+import fabricaClienteBO.registrarCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -19,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import persistencia.conexion.ConexionBD;
+import persistencia.conexion.IConexionBD;
 
 /**
  *
@@ -27,6 +31,11 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class modificarDatos extends JFrame {
     
     public modificarDatos() {
+        
+       IConexionBD conexion = new ConexionBD();
+
+        // llamamos al metodo para crear el BO con los DAOs para no usarlos en el GUI
+        ClienteBO clienteBO = registrarCliente.registrarCliente();
 
         setTitle("pantalla inicio sesion");
         setSize(700, 1000);

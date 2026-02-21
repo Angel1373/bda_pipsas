@@ -61,7 +61,7 @@ public class ClienteBO implements IClienteBO {
             throw new negocioException("El tecnico no puede ser un objeto Nulo");
         }
         // 2. Validamos que el tecnico no tenga un id ya asignado
-        if(cliente.getIdCliente()!=null){
+        if(cliente.getIdCliente()==null){
             LOG.warning("El cliente no puede tener un id ya asignado");
             throw new negocioException("El cliente no puede tener un id ya asignado");
         }
@@ -89,7 +89,39 @@ public class ClienteBO implements IClienteBO {
             LOG.warning("No se pudo registrar la fecha");
             throw new negocioException("Se ingreso una fecha futura o menor a 2020");
         }
-    
+            if(cliente.getCalle()== null){
+            LOG.warning("El cliente no puede no tener una calle asiganda");
+            throw new negocioException("La calle es invalida");
+        }
+            if(cliente.getColonia()== null){
+            LOG.warning("El cliente no puede no tener una colonia asignada");
+            throw new negocioException("La colonia es invalida");
+        }
+            if(cliente.getNumeroCasa()== null){
+            LOG.warning("El cliente no puede no tener un numero de casa asignado");
+            throw new negocioException("El numero de casa es invalido");
+        }
+            if(cliente.getUsuario()== null){
+            LOG.warning("El cliente no puede no tener un usuario");
+            throw new negocioException("El usuarrio es invalido");
+        }
+            if(cliente.getContrasena()== null){
+            LOG.warning("El cliente no puede no tener una contraseña");
+            throw new negocioException("La contraseña es invalida");
+        }    
+            if(cliente.getEtiqueta()== null){
+            LOG.warning("El cliente no puede no tener una etiqueta");
+            throw new negocioException("La etiquetda es invalida");
+        }    
+            if(cliente.getEdad()== null){
+            LOG.warning("El cliente no puede no tener una edad");
+            throw new negocioException("La edad es invalida");
+        }
+            if(cliente.getNumeroTelefono()== null){
+            LOG.warning("El cliente no puede no tener un numero de telefono");
+            throw new negocioException("El numero de telefono es invalido");
+        }   
+            
         /*
         En esta parte primero creamos el usuario para poder usar el id cliente en todas las tablas que se ocupen unir
         creamos 2 variables
@@ -170,6 +202,63 @@ public class ClienteBO implements IClienteBO {
       public boolean validarFechaNacimiento(LocalDate fecha) {
         return fecha.isBefore(LocalDate.now()); 
     }
+
+    @Override
+    public Cliente actualizarCliente(Cliente cliente) throws negocioException {
+      // aplicar todas las reglas de negocio para consultar un negocio
+        // 1. validar que el objeto NO sea nulo
+        if(cliente == null){
+            LOG.warning("El tecnico era un objeto Nulo");
+            throw new negocioException("El tecnico no puede ser un objeto Nulo");
+        }
+        // 2. Validamos que el tecnico no tenga un id ya asignado
+        if(cliente.getIdCliente()==null){
+            LOG.warning("El cliente no puede tener un id ya asignado");
+            throw new negocioException("El cliente no puede tener un id ya asignado");
+        }
+        // 3. validar que los nombres no sean null, esten vacios o solo espacios
+        if(!validarNombres(cliente.getNombres())){
+            LOG.warning("Se ingreso el nombre con formato invalido.");
+            throw new negocioException("El nombre ingresado es invalido por que tiene espacios o esta vacio");
+        }// 4. validar que el apellido paterno no sea null, vacio o solo espacios
+        if(!validarNombres(cliente.getApellidoPaterno())){
+            LOG.warning("Se ingreso el apellido con un formato invalido ");
+            throw new negocioException("El apellido ingresado es invalido por que tiene espacios o esta vacio");
+        }
+        //5. validamos que el apellido materno no sea null, vacio o solo espacios
+       if (!validarNombres(cliente.getApellidoMaterno())) {
+           LOG.warning("Se ingreso un apellido materno invalido");
+             throw new negocioException("El apellido materno es inválido");
+        }
+        //6. validamos el estado 
+         if(cliente.getEstado()== null){
+            LOG.warning("El cliente no puede no tener un estado");
+            throw new negocioException("El estado es invalido");
+        }
+        //7. Validamos fecha de nacimiento 
+        if(!validarFechaNacimiento(cliente.getFechaNacimiento())){
+            LOG.warning("No se pudo registrar la fecha");
+            throw new negocioException("Se ingreso una fecha futura o menor a 2020");
+        }
+        if(cliente.getEdad()== null){
+            LOG.warning("El cliente no puede no tener una edad");
+            throw new negocioException("La edad es invalida");
+        }
+        try{
+       Cliente clienteConsultado = this.clienteDAO.consultarCliente(cliente);
+          if(clienteConsultado == null){
+              LOG.warning("No se pudo obtener ese id del cliente");
+              throw new negocioException("El id del cliente no existe");
+          }
+      clienteDAO.actualizarCliente(cliente);
+    }catch (persistenciaException ex) {
+        LOG.warning("No se pudo actualizar el cliente");
+        throw new negocioException("Ocurrio un error al actualizar el cliente",ex);
+        }
+      
+        return cliente;
+        
+        }
 
   
     }

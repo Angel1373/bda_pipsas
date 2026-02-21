@@ -15,4 +15,6 @@ public interface IClienteDAO {
     
     // Metodo para agregar un cliente
     Cliente agregarCliente(Cliente cliente)throws persistenciaException;
+    Cliente actualizarCliente(Cliente cliente) throws persistenciaException;
+    Cliente consultarCliente(Cliente cliente) throws persistenciaException;
 }
