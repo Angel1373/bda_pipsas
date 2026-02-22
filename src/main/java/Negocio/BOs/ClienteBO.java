@@ -211,10 +211,11 @@ public class ClienteBO implements IClienteBO {
         return fecha.isBefore(LocalDate.now()); 
     }
 
+      //metodo para actualizar un cliente
+      // con el dto que tambien utilize para el insertar, tomo los valores y los voy actualizando 1 por 1 con el mismo id del cliente
     @Override
     public Cliente actualizarCliente(ClienteCompletoDTO cliente) throws negocioException {
-        
-        
+
        
       // aplicar todas las reglas de negocio para consultar un negocio
         // 1. validar que el objeto NO sea nulo

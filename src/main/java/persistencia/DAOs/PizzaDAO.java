@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.Dominio.Pizza;
@@ -20,22 +19,19 @@ import persistencia.conexion.IConexionBD;
  *
  * @author Usuario
  */
-public class PizzaDAO implements IPizzaDAO{
+public class PizzaDAO implements IPizzaDAO {
 
     private final IConexionBD conexionBD;
-    
+
     private static final Logger LOG = Logger.getLogger(PizzaDAO.class.getName());
-    
+
     public PizzaDAO(IConexionBD conexionBD) {
         this.conexionBD = conexionBD;
     }
-    
-    
+
     @Override
-    public Pizza agregarPizza(Pizza pizza) throws persistenciaException{
-        
-                
-        
+    public Pizza agregarPizza(Pizza pizza) throws persistenciaException {
+
         String comandoSQL = """
                             INSERT INTO pizzas (nombre, tamano, descripcion, precio,disponible)
                             VALUES (?,?,?,?,?)
@@ -47,11 +43,11 @@ public class PizzaDAO implements IPizzaDAO{
             ps.setString(2, pizza.getTamano());
             ps.setString(3, pizza.getDescripcion());
             ps.setDouble(4, pizza.getPrecio());
-            ps.setBoolean(5,pizza.isDisponible());
-                  
-                //ejecutamos el comando usando el preparedStatement
+            ps.setBoolean(5, pizza.isDisponible());
+
+            //ejecutamos el comando usando el preparedStatement
             int filasInsertadas = ps.executeUpdate();
-            
+
             // == 0 si no se registro nada y == 1 si se registro 
             if (filasInsertadas == 0) {
                 LOG.log(Level.WARNING, "No se pudo insertar al Técnico: {0}", pizza);
@@ -75,11 +71,35 @@ public class PizzaDAO implements IPizzaDAO{
             LOG.log(Level.SEVERE, "Error de SQL al insertar a la pizza", ex);
             throw new persistenciaException("No se pudo agregar la pizza");
         }
-        
-    }
-      
-    
-        
-    }
-    
 
+    }
+
+    @Override
+    public Pizza actualizarPizza(Pizza pizza) throws persistenciaException {
+        String comandoSQL = """
+                            UPDATE pizzas
+                            SET nombre = ?, tamano = ?, descripcion = ?, precio = ?, disponible = ?
+                            WHERE id_pizza = ?
+                            """;
+        try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL)) {
+            ps.setString(1, pizza.getNombre());
+            ps.setString(2, pizza.getTamano());
+            ps.setString(3, pizza.getDescripcion());
+            ps.setDouble(4, pizza.getPrecio());
+            ps.setBoolean(5, pizza.isDisponible());
+            ps.setInt(6, pizza.getIdPizza());
+            
+            if(ps.executeUpdate() == 0){
+                throw new persistenciaException("No se pudo actualizar: el ID de pizza no existe.");
+                
+            }
+            return pizza;
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, "Error de SQL al actualizar pizza ", ex);
+            throw new persistenciaException("Error al actualizar pizza", ex);
+        }
+        
+                            
+    }
+
+}

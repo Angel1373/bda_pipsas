@@ -14,5 +14,6 @@ import persistencia.Excepciones.persistenciaException;
 public interface IPizzaDAO {
     
     Pizza agregarPizza(Pizza pizza) throws persistenciaException;
+    Pizza actualizarPizza(Pizza pizza) throws persistenciaException;
     
 }
