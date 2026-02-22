@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.SQLException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -98,6 +99,23 @@ public class PantallaPrincipal extends JFrame {
 
         //cierra esta ventana principal
         dispose();
+
+        });
+        
+        //----- action listener del btnExpress -------
+        btnExpress.addActionListener(e -> {
+            
+            try{
+                //abre la ventana menuEXP
+                menuEXP mEX = new menuEXP();
+                mEX.setVisible(true);
+
+                //cierra esta ventana principal
+                dispose();
+        
+            } catch (SQLException ex){
+                System.out.println("Error al consultar pizzas disponibles" + ex.getMessage());
+            }
 
         });
     }
