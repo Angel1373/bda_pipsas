@@ -7,8 +7,10 @@ package com.mycompany.bda_pipsas;
 import Negocio.BOs.ClienteBO;
 import Negocio.BOs.IClienteBO;
 import Negocio.BOs.PedidoBO;
+import Negocio.BOs.PizzaBO;
 import Negocio.DTOs.ClienteCompletoDTO;
 import Negocio.DTOs.PedidoDTO;
+import Negocio.DTOs.PizzaDTO;
 import Negocio.Excepciones.negocioException;
 import java.time.LocalDate;
 import persistencia.DAOs.ClienteDAO;
@@ -16,13 +18,16 @@ import persistencia.DAOs.DomicilioDAO;
 import persistencia.DAOs.IClienteDAO;
 import persistencia.DAOs.IDomicilioDAO;
 import persistencia.DAOs.IPedidoDAO;
+import persistencia.DAOs.IPizzaDAO;
 import persistencia.DAOs.ITelefonoDAO;
 import persistencia.DAOs.IUsuarioDAO;
 import persistencia.DAOs.PedidoDAO;
+import persistencia.DAOs.PizzaDAO;
 import persistencia.DAOs.TelefonoDAO;
 import persistencia.DAOs.UsuarioDAO;
 import persistencia.Dominio.Cliente;
 import persistencia.Dominio.Pedido;
+import persistencia.Dominio.Pizza;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
@@ -45,9 +50,12 @@ public class pruebaBO {
     IDomicilioDAO domicilioDAO = new DomicilioDAO(conexion);
     ITelefonoDAO telefonoDAO = new TelefonoDAO(conexion);
     IPedidoDAO pedidoDAO = new PedidoDAO(conexion);
+    IPizzaDAO pizzaDAO = new PizzaDAO(conexion);
+
 
     ClienteBO clienteBO = new ClienteBO(clienteDAO, usuarioDAO, domicilioDAO, telefonoDAO);
     PedidoBO pedidoBO = new PedidoBO(pedidoDAO);
+    PizzaBO pizzaBO = new PizzaBO(pizzaDAO);
     
     //Cliente
     ClienteCompletoDTO dto = new ClienteCompletoDTO();
@@ -104,6 +112,34 @@ public class pruebaBO {
     } catch (negocioException e) {
             System.out.println("error al actualizar el cliente");;
     }
+        PizzaDTO pizzaDTO = new PizzaDTO();
+        pizzaDTO.setNombre("Pepperoni");
+        pizzaDTO.setTamano("Grande");
+        pizzaDTO.setDescripcion("Pizza normal de pepperoni");
+        pizzaDTO.setPrecio(199.99);
+        pizzaDTO.setDisponible(true);
+
+        try {
+            Pizza pizzaGuardada = pizzaBO.insertarPizza(pizzaDTO);
+            System.out.println("Pizza guardada con ID: " + pizzaGuardada.getIdPizza());
+        } catch (negocioException e) {
+            System.out.println("Error pizza: " + e.getMessage());
+        }
+        
+        PizzaDTO pizzaActualizar = new PizzaDTO();
+        pizzaActualizar.setId_pizza(1); 
+        pizzaActualizar.setNombre("Pepperoni especial");
+        pizzaActualizar.setTamano("Grande");
+        pizzaActualizar.setDescripcion("Pizza pepperoni con extra queso");
+        pizzaActualizar.setPrecio(219.99);
+        pizzaActualizar.setDisponible(true);
+
+        try {
+            Pizza pizzaEditada = pizzaBO.actualizarPizza(pizzaActualizar);
+            System.out.println("Pizza actualizada ID: " + pizzaEditada.getIdPizza());
+        } catch (negocioException e) {
+            System.out.println("Error al actualizar pizza: " + e.getMessage());
+        }
 }
 }
 

@@ -9,13 +9,15 @@ package Negocio.DTOs;
  * @author Gael Galaviz
  */
 public class PizzaDTO {
+    private int id_pizza;
     private String nombre;
     private String tamano;
     private String descripcion;
     private double precio;
     private boolean disponible;
 
-    public PizzaDTO(String nombre, String tamano, String descripcion, double precio, boolean disponible) {
+    public PizzaDTO(int id_pizza, String nombre, String tamano, String descripcion, double precio, boolean disponible) {
+        this.id_pizza = id_pizza;
         this.nombre = nombre;
         this.tamano = tamano;
         this.descripcion = descripcion;
@@ -24,6 +26,14 @@ public class PizzaDTO {
     }
 
     public PizzaDTO() {
+    }
+
+    public int getId_pizza() {
+        return id_pizza;
+    }
+
+    public void setId_pizza(int id_pizza) {
+        this.id_pizza = id_pizza;
     }
 
     public String getNombre() {
@@ -68,9 +78,10 @@ public class PizzaDTO {
 
     @Override
     public String toString() {
-        return "PizzaDTO{" + "nombre=" + nombre + ", tamano=" + tamano + ", descripcion=" + descripcion + ", precio=" + precio + ", disponible=" + disponible + '}';
+        return "PizzaDTO{" + "id_pizza=" + id_pizza + ", nombre=" + nombre + ", tamano=" + tamano + ", descripcion=" + descripcion + ", precio=" + precio + ", disponible=" + disponible + '}';
     }
-    
+
+   
     
     
 }
