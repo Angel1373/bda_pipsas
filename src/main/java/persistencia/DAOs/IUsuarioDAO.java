@@ -15,4 +15,5 @@ public interface IUsuarioDAO {
     Usuario agregarUsuario(Usuario usuario) throws persistenciaException;
     Usuario actualizarUsuario(Usuario usuario) throws persistenciaException;
     Usuario consultarUsuario(Usuario usuario) throws persistenciaException;
+    Usuario consultarUsuarioPorUsuario(Usuario usuario) throws persistenciaException;
 }

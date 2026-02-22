@@ -108,6 +108,7 @@ public class UsuarioDAO implements IUsuarioDAO{
         throw new persistenciaException("Error al consultar usuario", e);
     }
     }
+    // convierte fila de resultset en un objeto usuario
         private Usuario extraerUsuario(ResultSet rs) throws SQLException {
 
         Usuario u = new Usuario();
@@ -118,4 +119,33 @@ public class UsuarioDAO implements IUsuarioDAO{
 
         return u;
     }
+
+        // metodo que regresa un usuario a partir del usuario
+    @Override
+    public Usuario consultarUsuarioPorUsuario(Usuario usuario) throws persistenciaException {
+      String sql = """
+                 SELECT id_cliente, usuario, contrasena
+                 FROM usuarios
+                 WHERE usuario = ?
+                 """;
+
+        try (Connection conn = conexionBD.CrearConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, usuario.getUsuario());
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (!rs.next()) {
+                    throw new persistenciaException("No existe ese usuario");
+                }
+
+            return extraerUsuario(rs);
+        }
+
+    } catch (SQLException e) {
+        throw new persistenciaException("Error al consultar usuario", e);
+    }   
+    }
+    
 }

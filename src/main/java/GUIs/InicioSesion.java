@@ -4,20 +4,31 @@
  */
 package GUIs;
 
+import Negocio.BOs.IUsuarioBO;
+import Negocio.BOs.UsuarioBO;
+import Negocio.DTOs.UsuarioDTO;
+import Negocio.Excepciones.negocioException;
+import fabricaClienteBO.iniciarUsuario;
+import static fabricaClienteBO.iniciarUsuario.iniciarUsuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import persistencia.Dominio.Usuario;
+import persistencia.conexion.ConexionBD;
+import persistencia.conexion.IConexionBD;
 
 /**
  *
@@ -26,6 +37,9 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class InicioSesion extends JFrame {
     public InicioSesion() {
 
+        IConexionBD conexion = new ConexionBD();
+        // obtenemos el BO sin llamar a sus metodos
+        UsuarioBO usuarioBO = iniciarUsuario.iniciarUsuario();
         setTitle("pantalla inicio sesion");
         setSize(700, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -126,6 +140,7 @@ public class InicioSesion extends JFrame {
         //action listener que lleva a la pantalla de crear cuenta
         registrarse.addActionListener(e -> {
 
+            
         //abre la ventana de inicio de sesion
         registroClientes reg = new registroClientes();
         reg.setVisible(true);
@@ -137,13 +152,21 @@ public class InicioSesion extends JFrame {
         
         //action listener que lleva a la pantalla de opciones cliente
         iniciar.addActionListener(e -> {
-
-        //abre la ventana de opciones cliente
-        opcionesUsuario oU = new opcionesUsuario();
-        oU.setVisible(true);
-
-        //cierra esta ventana
-        dispose();
+            try{
+                UsuarioDTO usuario = new UsuarioDTO();
+                usuario.setUsuario(nombreUsuario.getText().trim());
+                usuario.setContrasena(contraseña.getText().trim());
+                Usuario consultarUsuario = usuarioBO.consultarUsuario(usuario);
+                // Si llegó aquí, login exitoso
+                // Y lo mandamos a la siguiente ventana
+                JOptionPane.showMessageDialog(this, "Bienvenido " + consultarUsuario.getUsuario());
+                opcionesUsuario oU = new opcionesUsuario();
+                oU.setVisible(true);
+                dispose();           
+            }catch (negocioException ex) {
+                // si no existe el usuario le mandamos el mensaje de error de inicio de sesion
+                 JOptionPane.showMessageDialog(this, ex.getMessage(),  "Error de inicio de sesión",JOptionPane.ERROR_MESSAGE );
+            }
 
         });
     }
