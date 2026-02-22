@@ -89,34 +89,42 @@ public class ClienteBO implements IClienteBO {
             LOG.warning("No se pudo registrar la fecha");
             throw new negocioException("Se ingreso una fecha futura o menor a 2020");
         }
+        //8. validar la calle
             if(cliente.getCalle()== null){
             LOG.warning("El cliente no puede no tener una calle asiganda");
             throw new negocioException("La calle es invalida");
         }
+        //9. validar la colonia
             if(cliente.getColonia()== null){
             LOG.warning("El cliente no puede no tener una colonia asignada");
             throw new negocioException("La colonia es invalida");
         }
+        //10. validar el numero de casa
             if(cliente.getNumeroCasa()== null){
             LOG.warning("El cliente no puede no tener un numero de casa asignado");
             throw new negocioException("El numero de casa es invalido");
         }
+        //11. validar el usuario
             if(cliente.getUsuario()== null){
             LOG.warning("El cliente no puede no tener un usuario");
             throw new negocioException("El usuarrio es invalido");
         }
+        //12. validar la contraseña del cliente
             if(cliente.getContrasena()== null){
             LOG.warning("El cliente no puede no tener una contraseña");
             throw new negocioException("La contraseña es invalida");
         }    
+        //13. validar la etiqueta del numero de telefono
             if(cliente.getEtiqueta()== null){
             LOG.warning("El cliente no puede no tener una etiqueta");
             throw new negocioException("La etiquetda es invalida");
-        }    
+        }   
+        //14. validar la edad
             if(cliente.getEdad()== null){
             LOG.warning("El cliente no puede no tener una edad");
             throw new negocioException("La edad es invalida");
         }
+        //15. validar el numero de telefono
             if(cliente.getNumeroTelefono()== null){
             LOG.warning("El cliente no puede no tener un numero de telefono");
             throw new negocioException("El numero de telefono es invalido");
@@ -204,7 +212,10 @@ public class ClienteBO implements IClienteBO {
     }
 
     @Override
-    public Cliente actualizarCliente(Cliente cliente) throws negocioException {
+    public Cliente actualizarCliente(ClienteCompletoDTO cliente) throws negocioException {
+        
+        
+       
       // aplicar todas las reglas de negocio para consultar un negocio
         // 1. validar que el objeto NO sea nulo
         if(cliente == null){
@@ -240,27 +251,74 @@ public class ClienteBO implements IClienteBO {
             LOG.warning("No se pudo registrar la fecha");
             throw new negocioException("Se ingreso una fecha futura o menor a 2020");
         }
+        //8. validamos la edad 
         if(cliente.getEdad()== null){
             LOG.warning("El cliente no puede no tener una edad");
             throw new negocioException("La edad es invalida");
         }
+         
+        Cliente clienteActualizar = new Cliente();
+        clienteActualizar.setIdCliente(cliente.getIdCliente());
+        clienteActualizar.setNombres(cliente.getNombres());
+        clienteActualizar.setApellidoPaterno(cliente.getApellidoPaterno());
+        clienteActualizar.setApellidoMaterno(cliente.getApellidoMaterno());
+        clienteActualizar.setFechaNacimiento(cliente.getFechaNacimiento());
+        clienteActualizar.setEdad(cliente.getEdad());
+        clienteActualizar.setEstado(cliente.getEstado());
         try{
-       Cliente clienteConsultado = this.clienteDAO.consultarCliente(cliente);
+       Cliente clienteConsultado = this.clienteDAO.consultarCliente(clienteActualizar);
           if(clienteConsultado == null){
               LOG.warning("No se pudo obtener ese id del cliente");
               throw new negocioException("El id del cliente no existe");
-          }
-      clienteDAO.actualizarCliente(cliente);
+          }else{
+             clienteDAO.actualizarCliente(clienteActualizar);
+          }        
+   
+        Telefono telefonoActualizar = new Telefono();
+        telefonoActualizar.setId_cliente(cliente.getIdCliente());
+        telefonoActualizar.setEtiqueta(cliente.getEtiqueta());
+        telefonoActualizar.setNumeroTelefono(cliente.getNumeroTelefono());
+        Telefono telefonoConsultado = this.telefonoDAO.consultarTelefono(telefonoActualizar);
+        
+        if(telefonoConsultado == null){
+            LOG.warning("No se pudo obtener ese id de cliente");
+            throw new negocioException("Error al actualizar el telefono");
+        }else{
+            telefonoDAO.actualizarTelefono(telefonoActualizar);
+        }
+        
+        Domicilio domicilioActu = new Domicilio();
+        domicilioActu.setId_cliente(cliente.getIdCliente());
+        domicilioActu.setCalle(cliente.getCalle());
+        domicilioActu.setColonia(cliente.getColonia());
+        domicilioActu.setNumeroCasa(cliente.getNumeroCasa());
+        Domicilio domicilioConsultado = this.domicilioDAO.consultarDomicilio(domicilioActu);
+        if(domicilioConsultado == null){
+            LOG.warning("No se pudo obtener ese id de cliente");
+            throw new negocioException("Error al actualizar el telefono");
+        }else{
+            domicilioDAO.actualizarDomicilio(domicilioActu);
+        }
+        
+        Usuario usuarioActu = new Usuario();
+        usuarioActu.setId_cliente(cliente.getIdCliente());
+        usuarioActu.setContrasena(cliente.getContrasena());
+        usuarioActu.setUsuario(cliente.getUsuario());
+        Usuario usuarioConsultado = this.usuarioDAO.consultarUsuario(usuarioActu);
+         if(usuarioConsultado == null){
+            LOG.warning("No se pudo obtener ese id de cliente");
+            throw new negocioException("Error al actualizar el usuario");
+        }else{
+            usuarioDAO.actualizarUsuario(usuarioActu);
+        }
     }catch (persistenciaException ex) {
         LOG.warning("No se pudo actualizar el cliente");
         throw new negocioException("Ocurrio un error al actualizar el cliente",ex);
         }
-      
-        return cliente;
         
+        return clienteActualizar;       
         }
 
-  
     }
     
 

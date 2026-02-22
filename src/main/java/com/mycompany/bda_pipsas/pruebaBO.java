@@ -51,18 +51,18 @@ public class pruebaBO {
     
     //Cliente
     ClienteCompletoDTO dto = new ClienteCompletoDTO();
-    dto.setNombres("Juan");
-    dto.setApellidoPaterno("Perez");
-    dto.setApellidoMaterno("Lopez");
+    dto.setNombres("sss");
+    dto.setApellidoPaterno("sss");
+    dto.setApellidoMaterno("sss");
     dto.setEstado(Cliente.EstadoCliente.ACTIVO);
-    dto.setFechaNacimiento(LocalDate.of(2000, 5, 10));
+    dto.setFechaNacimiento(LocalDate.of(2004, 2, 11));
 
-    dto.setUsuario("juan123");
-    dto.setContrasena("1234");
+    dto.setUsuario("sss");
+    dto.setContrasena("sss");
 
-    dto.setCalle("Av Siempre Viva");
-    dto.setColonia("Centro");
-    dto.setNumeroCasa("123");
+    dto.setCalle("rrr");
+    dto.setColonia("sss");
+    dto.setNumeroCasa("ss");
 
     dto.setNumeroTelefono("6671234567");
     dto.setEtiqueta("CASA");
@@ -73,6 +73,9 @@ public class pruebaBO {
     } catch (negocioException e) {
         System.out.println("Error: " + e.getMessage());
     }
+    /*
+    
+    
     // Pedido
     PedidoDTO pedidoDTO = new PedidoDTO();
     pedidoDTO.setEstado("pendiente");
@@ -84,7 +87,38 @@ public class pruebaBO {
         } catch (negocioException e) {
             System.out.println("Error pedido: " + e.getMessage());
         }
-    
+ */
+       ClienteCompletoDTO dto2 = new ClienteCompletoDTO();
+
+        dto2.setIdCliente(1);
+
+        dto2.setNombres("Prueba");
+        dto2.setApellidoPaterno("Actualizar");
+        dto2.setApellidoMaterno("Pelon");
+        dto2.setEstado(Cliente.EstadoCliente.INACTIVO);
+        dto2.setFechaNacimiento(LocalDate.of(2012, 3, 14));
+        dto2.setEdad(66);
+
+        // teléfono
+        dto2.setNumeroTelefono("1234567890");
+        dto2.setEtiqueta("pelon");
+
+        // domicilio
+        dto2.setCalle("caso");
+        dto2.setColonia("caso");
+        dto2.setNumeroCasa("111");
+
+        // usuario
+        dto2.setUsuario("Prueba");
+        dto2.setContrasena("4321");
+        try{
+            clienteBO.actualizarCliente(dto2);
+        }catch (negocioException e) {
+            System.out.println("Error pedido: " + e.getMessage());
+        }
+        
+        
+      /*     
      try{
         
         Cliente cliente = new Cliente();
@@ -104,6 +138,7 @@ public class pruebaBO {
     } catch (negocioException e) {
             System.out.println("error al actualizar el cliente");;
     }
+    */
 }
 }
 

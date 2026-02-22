@@ -12,16 +12,16 @@ public class Telefono {
     private Integer id_telefono;
     private String numeroTelefono;
     private String etiqueta;
-    private int id_cliente;
+    private Integer id_cliente;
 
-    public Telefono(Integer id_telefono, String numeroTelefono, String etiqueta, int id_cliente) {
+    public Telefono(Integer id_telefono, String numeroTelefono, String etiqueta, Integer id_cliente) {
         this.id_telefono = id_telefono;
         this.numeroTelefono = numeroTelefono;
         this.etiqueta = etiqueta;
         this.id_cliente = id_cliente;
     }
 
-    public Telefono(String numeroTelefono, String etiqueta, int id_cliente) {
+    public Telefono(String numeroTelefono, String etiqueta, Integer id_cliente) {
         this.numeroTelefono = numeroTelefono;
         this.etiqueta = etiqueta;
         this.id_cliente = id_cliente;
@@ -46,9 +46,15 @@ public class Telefono {
         return etiqueta;
     }
 
-    public int getId_cliente() {
+    public Integer getId_cliente() {
         return id_cliente;
     }
+
+    public void setId_cliente(Integer id_cliente) {
+        this.id_cliente = id_cliente;
+    }
+
+   
 
   
 
@@ -66,9 +72,7 @@ public class Telefono {
         this.etiqueta = etiqueta;
     }
 
-    public void setId_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
-    }
+  
 
     @Override
     public String toString() {

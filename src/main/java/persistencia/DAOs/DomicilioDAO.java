@@ -68,7 +68,7 @@ public class DomicilioDAO implements IDomicilioDAO {
     String sql = """
                  UPDATE domicilios
                  SET calle = ?, colonia = ?, numero = ?
-                 WHERE id_domicilio = ?
+                 WHERE id_cliente = ?
                  """;
 
     try (Connection conn = conexionBD.CrearConexion();
@@ -77,7 +77,7 @@ public class DomicilioDAO implements IDomicilioDAO {
         ps.setString(1, domicilio.getCalle());
         ps.setString(2, domicilio.getColonia());
         ps.setString(3, domicilio.getNumeroCasa());
-        ps.setInt(4, domicilio.getId_domicilio());
+        ps.setInt(4, domicilio.getId_cliente());
 
         int filas = ps.executeUpdate();
 
@@ -97,13 +97,13 @@ public class DomicilioDAO implements IDomicilioDAO {
           String sql = """
                  SELECT id_domicilio, id_cliente, calle, colonia, numero
                  FROM domicilios
-                 WHERE id_domicilio = ?
+                 WHERE id_cliente = ?
                  """;
 
     try (Connection conn = conexionBD.CrearConexion();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setInt(1, domicilio.getId_domicilio());
+        ps.setInt(1, domicilio.getId_cliente());
 
         try (ResultSet rs = ps.executeQuery()) {
 
@@ -118,7 +118,7 @@ public class DomicilioDAO implements IDomicilioDAO {
         throw new persistenciaException("Error al consultar domicilio", e);
     }
     }
-    // lo mismo que el de cliente, tomamos los valores y lo hacemos un objeto y lo regresamos
+    // lo mismo que el de cliente, tomamos los valores y lo hacemos un objeto 
         private Domicilio extraerDomicilio(ResultSet rs) throws SQLException {
 
         Domicilio d = new Domicilio();

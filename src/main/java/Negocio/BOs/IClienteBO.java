@@ -15,6 +15,7 @@ import persistencia.Dominio.Cliente;
 public interface IClienteBO {
     
     public Cliente insertarCliente(ClienteCompletoDTO cliente) throws negocioException;
-    public Cliente actualizarCliente(Cliente cliente) throws negocioException;
+    public Cliente actualizarCliente(ClienteCompletoDTO cliente) throws negocioException;
+    
     
 }
