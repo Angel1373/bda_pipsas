@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import persistencia.Dominio.Sesion;
 import persistencia.Dominio.Usuario;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
@@ -157,6 +158,9 @@ public class InicioSesion extends JFrame {
                 usuario.setUsuario(nombreUsuario.getText().trim());
                 usuario.setContrasena(contraseña.getText().trim());
                 Usuario consultarUsuario = usuarioBO.consultarUsuario(usuario);
+                // en esta parte guardamos la sesion del usuario para poder usarlo en las demas ventanas
+                // usamos usario actual por que guarda el usuario 
+                Sesion.usuarioActual = consultarUsuario;
                 // Si llegó aquí, login exitoso
                 // Y lo mandamos a la siguiente ventana
                 JOptionPane.showMessageDialog(this, "Bienvenido " + consultarUsuario.getUsuario());

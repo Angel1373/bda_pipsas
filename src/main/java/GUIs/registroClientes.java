@@ -6,8 +6,10 @@ package GUIs;
 
 import Negocio.BOs.ClienteBO;
 import Negocio.BOs.IClienteBO;
+import Negocio.BOs.UsuarioBO;
 import Negocio.DTOs.ClienteCompletoDTO;
 import Negocio.Excepciones.negocioException;
+import fabricaClienteBO.iniciarUsuario;
 import fabricaClienteBO.registrarCliente;
 import static fabricaClienteBO.registrarCliente.registrarCliente;
 import java.awt.BorderLayout;
@@ -24,6 +26,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -39,6 +42,7 @@ import persistencia.DAOs.PedidoDAO;
 import persistencia.DAOs.TelefonoDAO;
 import persistencia.DAOs.UsuarioDAO;
 import persistencia.Dominio.Cliente;
+import persistencia.Dominio.Sesion;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
@@ -51,6 +55,7 @@ public class registroClientes extends JFrame {
         
         IConexionBD conexion = new ConexionBD();
 
+       
         // llamamos al metodo para crear el BO con los DAOs para no usarlos en el GUI
         ClienteBO clienteBO = registrarCliente.registrarCliente();
         setTitle("pantalla inicio sesion");
@@ -244,6 +249,7 @@ public class registroClientes extends JFrame {
         //action listener que lleva a la pantalla de opciones cliente
         crearCuenta.addActionListener(e -> {
           try{
+              
          ClienteCompletoDTO nuevoCliente = new ClienteCompletoDTO();
          nuevoCliente.setUsuario(nombreU.getText().trim());
          nuevoCliente.setContrasena(contraseña.getText().trim());
@@ -257,8 +263,7 @@ public class registroClientes extends JFrame {
          String edadTexto = edad.getText().trim();
          int edadInteger = Integer.parseInt(edadTexto);
          nuevoCliente.setEdad(edadInteger);
-         
-         //obtenemos el estadoLabel quitamos espacios y lo hacemos minusculas por que asi lo hice en la clase cliente
+         //obtenemos el estado quitamos espacios y lo hacemos minusculas por que asi lo hice en la clase cliente
          // en el value of busca un estado igual al que el cliente puso y lo convierte a enum
          Cliente.EstadoCliente estadoNuevo = Cliente.EstadoCliente.valueOf(estado.getText().trim().toUpperCase());
          nuevoCliente.setEstado(estadoNuevo);
@@ -268,21 +273,18 @@ public class registroClientes extends JFrame {
          nuevoCliente.setCalle(calle.getText().trim());
          nuevoCliente.setColonia(colonia.getText().trim());
          nuevoCliente.setNumeroCasa(numero.getText().trim());
-
-        
-            
-                clienteBO.insertarCliente(nuevoCliente);
+         Cliente clienteInsertado = clienteBO.insertarCliente(nuevoCliente);
+          JOptionPane.showMessageDialog(this, "Cuenta creada con éxito");
+        // en esta parte guardamos la sesion del usuario para poder usarlo en las demas ventanas
+         Sesion.setIdCliente(clienteInsertado.getIdCliente());
+        opcionesUsuario oU = new opcionesUsuario();
+        oU.setVisible(true);
+        dispose();
+                
             } catch (negocioException ex) {
                 Logger.getLogger("Error al insertar al cliente");
               
             }
-        //abre la ventana de opciones cliente
-        opcionesUsuario oU = new opcionesUsuario();
-        oU.setVisible(true);
-
-        //cierra esta ventana
-        dispose();
-
         });
     }
 }

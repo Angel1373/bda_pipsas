@@ -57,11 +57,11 @@ public class ClienteBO implements IClienteBO {
          // aplicar todas las reglas de negocio para consultar un negocio
         // 1. validar que el objeto NO sea nulo
         if(cliente == null){
-            LOG.warning("El tecnico era un objeto Nulo");
-            throw new negocioException("El tecnico no puede ser un objeto Nulo");
+            LOG.warning("El cliente era un objeto Nulo");
+            throw new negocioException("El cliente no puede ser un objeto Nulo");
         }
-        // 2. Validamos que el tecnico no tenga un id ya asignado
-        if(cliente.getIdCliente()==null){
+        // 2. Validamos que el cliente no tenga un id ya asignado
+        if(cliente.getIdCliente() != null){
             LOG.warning("El cliente no puede tener un id ya asignado");
             throw new negocioException("El cliente no puede tener un id ya asignado");
         }

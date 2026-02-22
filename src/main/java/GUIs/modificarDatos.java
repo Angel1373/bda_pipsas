@@ -5,6 +5,11 @@
 package GUIs;
 
 import Negocio.BOs.ClienteBO;
+import Negocio.BOs.UsuarioBO;
+import Negocio.DTOs.ClienteCompletoDTO;
+import Negocio.DTOs.UsuarioDTO;
+import Negocio.Excepciones.negocioException;
+import fabricaClienteBO.iniciarUsuario;
 import fabricaClienteBO.registrarCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,16 +18,20 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import persistencia.Dominio.Cliente;
+import persistencia.Dominio.Sesion;
+import persistencia.Dominio.Usuario;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
@@ -38,6 +47,8 @@ public class modificarDatos extends JFrame {
 
         // llamamos al metodo para crear el BO con los DAOs para no usarlos en el GUI
         ClienteBO clienteBO = registrarCliente.registrarCliente();
+        //llamamos al metodo para poder usar el consultar usuario por usuario 
+        UsuarioBO usuarioBO = iniciarUsuario.iniciarUsuario();
 
         setTitle("pantalla inicio sesion");
         setSize(700, 1000);
@@ -216,21 +227,24 @@ public class modificarDatos extends JFrame {
         abajo.setBackground(new Color(200, 200, 200));
 
 
-        JButton crearCuenta = new JButton("Confirmar");
-        crearCuenta.setFont(new Font("Serif", Font.BOLD, 24));
-        crearCuenta.setBackground(new Color(70, 150, 220));
-        crearCuenta.setAlignmentX(Component.CENTER_ALIGNMENT);
-        crearCuenta.setMaximumSize(new Dimension(450, 60));
+        JButton modificarCliente = new JButton("Confirmar");
+        modificarCliente.setFont(new Font("Serif", Font.BOLD, 24));
+        modificarCliente.setBackground(new Color(70, 150, 220));
+        modificarCliente.setAlignmentX(Component.CENTER_ALIGNMENT);
+        modificarCliente.setMaximumSize(new Dimension(450, 60));
 
-        abajo.add(crearCuenta);
+        abajo.add(modificarCliente);
 
         add(abajo, BorderLayout.SOUTH);
         
          
         //action listener que lleva a la pantalla de opciones cliente
-        crearCuenta.addActionListener(e -> {
+        modificarCliente.addActionListener(e -> {
+        try{
             
-        Cliente clienteModificar = new Cliente();
+        
+        ClienteCompletoDTO clienteModificar = new ClienteCompletoDTO();
+        clienteModificar.setIdCliente(Sesion.getIdCliente());
         clienteModificar.setNombres(nombres.getText().trim());
         clienteModificar.setApellidoPaterno(aPaterno.getText().trim());
         clienteModificar.setApellidoMaterno(aMaterno.getText().trim());
@@ -241,9 +255,27 @@ public class modificarDatos extends JFrame {
          String edadTexto = edad.getText().trim();
          int edadInteger = Integer.parseInt(edadTexto);
          clienteModificar.setEdad(edadInteger);
-         clienteModificar.setEstado(Cliente.EstadoCliente.valueOf(estado.getText().trim().toUpperCase()));
+         clienteModificar.setCalle(calle.getText().trim());
+         clienteModificar.setColonia(colonia.getText().trim());
+         clienteModificar.setNumeroCasa(numero.getText().trim());
          
-
+         //obtenemos el estado quitamos espacios y lo hacemos minusculas por que asi lo hice en la clase cliente
+         // en el value of busca un estado igual al que el cliente puso y lo convierte a enum
+         Cliente.EstadoCliente estadoNuevo = Cliente.EstadoCliente.valueOf(estado.getText().trim().toUpperCase());
+         clienteModificar.setEstado(estadoNuevo);
+         clienteModificar.setNumeroTelefono(telefono.getText().trim());
+         clienteModificar.setContrasena(contraseña.getText().trim());
+         clienteModificar.setUsuario(nombreU.getText().trim());
+         clienteModificar.setEtiqueta(etiquetaTelefono.getText().trim());
+         
+         Cliente clienteModificado = clienteBO.actualizarCliente(clienteModificar);
+         //le damos el id del cliente a la sesion mediante el modificado
+         Sesion.setIdCliente(clienteModificado.getIdCliente());
+         JOptionPane.showMessageDialog(this, "Modificacion con éxito ");
+         }catch (negocioException ex) {
+                Logger.getLogger("Error al insertar al cliente");
+                JOptionPane.showMessageDialog(this, ex.getMessage(),  "Error al actualizar ",JOptionPane.ERROR_MESSAGE );
+              }
         //abre la ventana de opciones cliente
         opcionesUsuario oU = new opcionesUsuario();
         oU.setVisible(true);
