@@ -4,11 +4,13 @@
  */
 package persistencia.DAOs;
 
+import Negocio.DTOs.DetallePedidoDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.Dominio.Pedido;
@@ -67,6 +69,74 @@ public class PedidoDAO implements IPedidoDAO {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE,"Error de SQL al insertar el pedido", ex);
             throw new persistenciaException("No se pudo agregar el pedido", ex);
+        }
+    }
+    
+    @Override
+    public Pedido agregarPedidoCompleto(Pedido pedido, List<DetallePedidoDTO> detalles) throws persistenciaException {
+        String insertPedido = "insert into pedidos (estado, notas, costo) values (?,?,?)";
+        
+        String insertDetalle = "insert into pizzasEnPedidos (id_pedido, id_pizza, cantidad_pizza, notas) values (?,?,?,?)";
+        
+        Connection conn = null;
+        
+        try {
+            conn = conexionBD.CrearConexion();
+            conn.setAutoCommit(false);//esto para iniciar una tipo transaccion, o se guarda todo o nada
+
+            try (PreparedStatement ps = conn.prepareStatement(insertPedido, Statement.RETURN_GENERATED_KEYS)) {
+
+                ps.setString(1, pedido.getEstado().name().toLowerCase());
+                ps.setString(2, pedido.getNotas());
+                ps.setDouble(3, pedido.getCosto());
+                
+                ps.executeUpdate();
+                
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        pedido.setIdPedido(rs.getInt(1));
+                    }
+                }
+            }
+            
+            try (PreparedStatement psDetalle = conn.prepareStatement(insertDetalle)) {
+                for (DetallePedidoDTO detalle : detalles) { 
+                    psDetalle.setInt(1, pedido.getIdPedido());
+                    psDetalle.setInt(2, detalle.getPizza().getId_pizza());
+                    psDetalle.setInt(3, detalle.getCantidad());
+                    psDetalle.setString(4, detalle.getNotas());
+                    
+                    psDetalle.executeUpdate();
+                }
+            }
+
+            conn.commit();
+
+            return pedido;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (conn != null){
+                    conn.rollback();//hace un rollback si algo nosa le bien
+                }
+            } catch (SQLException ex) {
+                System.out.println("Hubo un error al insertar el pedido: " + ex);
+            }
+
+            throw new persistenciaException("Error al insertar pedido completo");
+
+        } finally {
+            try {
+                if (conn != null){
+                    conn.setAutoCommit(true);
+                }
+                if (conn != null){
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error: " + e);;
+            }
         }
     }
 }

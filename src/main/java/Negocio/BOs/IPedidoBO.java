@@ -4,8 +4,10 @@
  */
 package Negocio.BOs;
 
+import Negocio.DTOs.DetallePedidoDTO;
 import Negocio.DTOs.PedidoDTO;
 import Negocio.Excepciones.negocioException;
+import java.util.List;
 import persistencia.Dominio.Pedido;
 
 /**
@@ -15,4 +17,5 @@ import persistencia.Dominio.Pedido;
 public interface IPedidoBO {
     public Pedido insertarPedido(PedidoDTO pedido) throws negocioException;
     
+    public void confirmarPedidoCompleto(String notas, List<DetallePedidoDTO> detalles) throws negocioException;
 }

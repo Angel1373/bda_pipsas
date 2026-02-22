@@ -4,6 +4,8 @@
  */
 package persistencia.DAOs;
 
+import Negocio.DTOs.DetallePedidoDTO;
+import java.util.List;
 import persistencia.Dominio.Pedido;
 import persistencia.Excepciones.persistenciaException;
 
@@ -15,4 +17,5 @@ import persistencia.Excepciones.persistenciaException;
 public interface IPedidoDAO {
     Pedido agregarPedido(Pedido pedido) throws persistenciaException;
     
+    Pedido agregarPedidoCompleto(Pedido pedido, List<DetallePedidoDTO> detalles) throws persistenciaException;
 }

@@ -4,7 +4,10 @@
  */
 package GUIs;
 
+import Negocio.BOs.IPedidoBO;
+import Negocio.BOs.PedidoBO;
 import Negocio.DTOs.DetallePedidoDTO;
+import Negocio.Excepciones.negocioException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -18,10 +21,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import persistencia.DAOs.IPedidoDAO;
+import persistencia.DAOs.PedidoDAO;
 import persistencia.Dominio.PedidoActual;
+import persistencia.conexion.ConexionBD;
+import persistencia.conexion.IConexionBD;
 
 /**
  *
@@ -92,12 +100,12 @@ public class MiPedido extends JFrame {
         volver.setMaximumSize(new Dimension(350, 60));
         abajo.add(volver);
         
-        JButton agregar = new JButton("Confirmar Pedido");
-        agregar.setFont(new Font("Serif", Font.BOLD, 24));
-        agregar.setBackground(new Color(70, 150, 220));
-        agregar.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        agregar.setMaximumSize(new Dimension(350, 60));
-        abajo.add(agregar);
+        JButton confirmar = new JButton("Confirmar Pedido");
+        confirmar.setFont(new Font("Serif", Font.BOLD, 24));
+        confirmar.setBackground(new Color(70, 150, 220));
+        confirmar.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        confirmar.setMaximumSize(new Dimension(350, 60));
+        abajo.add(confirmar);
 
         add(abajo, BorderLayout.SOUTH);
         
@@ -118,6 +126,47 @@ public class MiPedido extends JFrame {
             
         }
         });
+        
+        //aqui va uno largo... action listener del boton confirmar pedido
+        confirmar.addActionListener(e -> {
+            
+            try {
+                if (PedidoActual.getDetalles().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay productos en el pedido", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                IConexionBD conexion = new ConexionBD();
+                
+                IPedidoDAO pedidoDAO = new PedidoDAO(conexion);
+                
+                IPedidoBO pedidoBO = new PedidoBO(pedidoDAO);
+                
+                pedidoBO.confirmarPedidoCompleto( "Pedido generado desde la aplicacion", PedidoActual.getDetalles());
+                
+                JOptionPane.showMessageDialog(this, "Su pedido ha sido confirmado");
+                
+                PedidoActual.limpiar();//quita las cosas del "carrito" o sea ya no van a estar las pizzas para cuando se empiece otro peddio
+                
+                cargarTarjetas();
+                actualizarTotal();
+                
+                } catch (negocioException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error al confirmar pedido:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            
+
+
+            //abre la ventana de menuProgramado
+            try{
+                menuProgramado mP = new menuProgramado();
+                mP.setVisible(true);
+                dispose();
+                } catch (SQLException ex){
+            
+                } 
+            });
     }
 
     private void cargarTarjetas() {

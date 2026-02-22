@@ -5,11 +5,15 @@
  */
 package Negocio.BOs;
 
+import Negocio.DTOs.DetallePedidoDTO;
 import Negocio.DTOs.PedidoDTO;
 import Negocio.Excepciones.negocioException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.DAOs.IPedidoDAO;
+import persistencia.DAOs.IPizzaEnPedidoDAO;
+import persistencia.DAOs.PizzaEnPedidoDAO;
 import persistencia.Dominio.Pedido;
 import persistencia.Excepciones.persistenciaException;
 
@@ -65,4 +69,22 @@ public class PedidoBO implements IPedidoBO {
             throw new negocioException("Error al guardar el pedido", e);
         }
     }
+    
+    @Override
+    public void confirmarPedidoCompleto(String notas, List<DetallePedidoDTO> detalles) throws negocioException {
+        if (detalles == null || detalles.isEmpty()) {
+            throw new negocioException("El pedido no tiene productos");
+        }
+        double total = detalles.stream().mapToDouble(DetallePedidoDTO::getSubtotal).sum();
+        Pedido pedido = new Pedido();
+        pedido.setEstado(Pedido.estadoPedido.PENDIENTE);
+        pedido.setNotas(notas);
+        pedido.setCosto(total);
+        try {
+            pedidoDAO.agregarPedidoCompleto(pedido, detalles);
+        } catch (persistenciaException e) {
+            throw new negocioException("Error al guardar pedido completo", e);
+        }
+    }
+    
 }

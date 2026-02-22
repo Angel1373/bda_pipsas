@@ -4,6 +4,7 @@
  */
 package GUIs;
 
+import Negocio.DTOs.PizzaDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -97,12 +98,15 @@ public class menuProgramado extends JFrame {
 
             while (rs.next()) {
 
-                String nombre = rs.getString("nombre");
-                String tamano = rs.getString("tamano");
-                String descripcion = rs.getString("descripcion");
-                double precio = rs.getDouble("precio");
+                PizzaDTO pizza = new PizzaDTO();
+                pizza.setId_pizza(rs.getInt("id_pizza")); // 🔥 ESTA LINEA ES CLAVE
+                pizza.setNombre(rs.getString("nombre"));
+                pizza.setTamano(rs.getString("tamano"));
+                pizza.setDescripcion(rs.getString("descripcion"));
+                pizza.setPrecio(rs.getDouble("precio"));
+                pizza.setDisponible(true);
 
-                JPanel tarjeta = crearTarjeta(nombre, tamano, descripcion, precio);
+                JPanel tarjeta = crearTarjeta(pizza);
 
                 panel.add(tarjeta);
                 panel.add(Box.createVerticalStrut(20));
@@ -113,7 +117,7 @@ public class menuProgramado extends JFrame {
     } 
     
     //crea una tarjetita, apartado para mostrar informacion de una pizza
-    private JPanel crearTarjeta(String nombre, String tamano, String descripcion, double precio) {
+    private JPanel crearTarjeta(PizzaDTO pizza) {
 
         JPanel tarjeta = new JPanel();
         tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
@@ -123,11 +127,11 @@ public class menuProgramado extends JFrame {
 
         tarjeta.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 
-        JLabel lblNombre = new JLabel(nombre + " - " + tamano);
+        JLabel lblNombre = new JLabel(pizza.getNombre() + " - " + pizza.getTamano());
         lblNombre.setFont(new Font("Serif", Font.BOLD, 20));
 
-        JLabel lblDescripcion = new JLabel(descripcion);
-        JLabel lblPrecio = new JLabel("Precio: $" + precio);
+        JLabel lblDescripcion = new JLabel(pizza.getDescripcion());
+        JLabel lblPrecio = new JLabel("Precio: $" + pizza.getPrecio());
 
         JButton verDetalles = new JButton("Ver detalles");
         verDetalles.setBackground(new Color(100, 200, 120));
@@ -144,7 +148,7 @@ public class menuProgramado extends JFrame {
         verDetalles.addActionListener(e -> {
 
         //abre la ventana de detallespiza
-        DetallePizza dp = new DetallePizza(nombre, tamano, descripcion, precio);
+        DetallePizza dp = new DetallePizza(pizza);
         dp.setVisible(true);
 
         //cierra esta ventana

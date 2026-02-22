@@ -32,7 +32,7 @@ import persistencia.Dominio.PedidoActual;
  */
 public class DetallePizza extends JFrame {
 
-    public DetallePizza(String nombre, String tamano, String descripcion, double precio) {
+    public DetallePizza(PizzaDTO pizza) {
 
         setTitle("Detalle Pizza");
         setSize(600, 800);
@@ -56,7 +56,7 @@ public class DetallePizza extends JFrame {
         gridCentral.setLayout(new GridLayout(2, 2));
         
         //pone el nombre de la pizza, arriba a la izquierda
-        gridCentral.add(new JLabel(nombre, SwingConstants.CENTER));
+        gridCentral.add(new JLabel(pizza.getNombre(), SwingConstants.CENTER));
         
         
         //poner tamaño y descripcion arriba a la derecha
@@ -64,8 +64,8 @@ public class DetallePizza extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JLabel textoTamano = new JLabel("Tamaño: " + tamano);
-        JLabel textoDescripcion = new JLabel("Descripcion: " + descripcion);
+        JLabel textoTamano = new JLabel("Tamaño: " + pizza.getTamano());
+        JLabel textoDescripcion = new JLabel("Descripcion: " + pizza.getDescripcion());
         panel.add(textoTamano);
         panel.add(Box.createVerticalStrut(5)); // pequeño espacio
         panel.add(textoDescripcion);
@@ -160,34 +160,25 @@ public class DetallePizza extends JFrame {
         
         //actionlistener del boton agregar
         agregar.addActionListener(e -> {
-
+            
             int cantidad = Integer.parseInt(txtCantidad.getText());
-
             JTextArea areaNotas = (JTextArea) gridCentral.getComponent(2);
             String notas = areaNotas.getText();
-
-            PizzaDTO pizzaDTO = new PizzaDTO();
-            pizzaDTO.setNombre(nombre);
-            pizzaDTO.setTamano(tamano);
-            pizzaDTO.setDescripcion(descripcion);
-            pizzaDTO.setPrecio(precio);
-            pizzaDTO.setDisponible(true);
-
+            
             DetallePedidoDTO detalle = new DetallePedidoDTO();
-            detalle.setPizza(pizzaDTO);
+            detalle.setPizza(pizza);
             detalle.setCantidad(cantidad);
             detalle.setNotas(notas);
-
+            
             PedidoActual.agregarDetalle(detalle);
-
+            
             JOptionPane.showMessageDialog(this, "Pizza agregada al pedido");
-
-            //
+            
             try {
                 new menuProgramado().setVisible(true);
                 dispose();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+            ex.printStackTrace();
             }
         });
     }
