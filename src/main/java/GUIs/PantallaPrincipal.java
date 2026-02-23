@@ -46,7 +46,7 @@ public class PantallaPrincipal extends JFrame {
         arriba.add(textoArriba);
         add(arriba, BorderLayout.NORTH);
 
-        //---- parte del centro con los 2 botones y donde deberia estar la imagen -----
+        //---- parte del centro con los 2 botones (ahora 3 por sesionEmpleado) y donde deberia estar la imagen pero no hay imagen porque no hay tiempo para andar investigando como ponerla :P -----
         JPanel centro = new JPanel();
         //el box layout en el eje Y es para acomodar apilados, o sea vertical
         centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
@@ -62,6 +62,17 @@ public class PantallaPrincipal extends JFrame {
         btnSesion.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         centro.add(btnSesion);
+
+        centro.add(Box.createVerticalStrut(40));
+        
+        //el boton de iniciar sesion para empleado
+        JButton btnEmpleado = new JButton("Iniciar sesion como empleado");
+        btnEmpleado.setBackground(new Color(0, 168, 49));
+        btnEmpleado.setFont(new Font("Serif", Font.BOLD, 20));
+        btnEmpleado.setMaximumSize(new Dimension(300, 60));
+        btnEmpleado.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        centro.add(btnEmpleado);
 
         centro.add(Box.createVerticalStrut(40));
 
@@ -96,6 +107,18 @@ public class PantallaPrincipal extends JFrame {
         //abre la ventana de inicio de sesion
         InicioSesion inicio = new InicioSesion();
         inicio.setVisible(true);
+
+        //cierra esta ventana principal
+        dispose();
+
+        });
+        
+        //----- action listener del btnEmpleado -------
+        btnEmpleado.addActionListener(e -> {
+
+        //abre la ventana de inicio de sesion
+        SesionEmpleado se = new SesionEmpleado();
+        se.setVisible(true);
 
         //cierra esta ventana principal
         dispose();
