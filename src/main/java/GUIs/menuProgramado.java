@@ -4,6 +4,8 @@
  */
 package GUIs;
 
+import Negocio.BOs.IPizzaBO;
+import Negocio.BOs.PizzaBO;
 import Negocio.DTOs.PizzaDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -22,6 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import persistencia.DAOs.IPizzaDAO;
+import persistencia.DAOs.PizzaDAO;
 import persistencia.conexion.ConexionBD;
 
 /**
@@ -88,33 +93,25 @@ public class menuProgramado extends JFrame {
     }
     
     // metodo que selecciona solo pizzas disponibles 
-    private void cargarPizzas(JPanel panel) throws SQLException {
+    private void cargarPizzas(JPanel panel) {
 
-        try (Connection con = conexion.CrearConexion()) {
+        try {
 
-            String sql = "SELECT * FROM pizzas WHERE disponible = 1";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            IPizzaDAO pizzaDAO = new PizzaDAO(conexion);
+            IPizzaBO pizzaBO = new PizzaBO(pizzaDAO);
 
-            while (rs.next()) {
+            List<PizzaDTO> pizzas = pizzaBO.obtenerPizzasDisponibles();
 
-                PizzaDTO pizza = new PizzaDTO();
-                pizza.setId_pizza(rs.getInt("id_pizza")); // 🔥 ESTA LINEA ES CLAVE
-                pizza.setNombre(rs.getString("nombre"));
-                pizza.setTamano(rs.getString("tamano"));
-                pizza.setDescripcion(rs.getString("descripcion"));
-                pizza.setPrecio(rs.getDouble("precio"));
-                pizza.setDisponible(true);
-
+            for (PizzaDTO pizza : pizzas) {
                 JPanel tarjeta = crearTarjeta(pizza);
-
                 panel.add(tarjeta);
                 panel.add(Box.createVerticalStrut(20));
             }
 
-        } 
-        
-    } 
+        } catch (Exception e) {
+            System.out.println("Error al cargar pizzas" + e.getMessage());
+        }
+    }
     
     //crea una tarjetita, apartado para mostrar informacion de una pizza
     private JPanel crearTarjeta(PizzaDTO pizza) {

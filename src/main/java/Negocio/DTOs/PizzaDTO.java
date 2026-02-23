@@ -25,6 +25,18 @@ public class PizzaDTO {
         this.disponible = disponible;
     }
 
+    public PizzaDTO(double precio, boolean disponible) {
+        this.precio = precio;
+        this.disponible = disponible;
+    }
+
+    public PizzaDTO(int id_pizza, double precio, boolean disponible) {
+        this.id_pizza = id_pizza;
+        this.precio = precio;
+        this.disponible = disponible;
+    }
+
+    
     public PizzaDTO() {
     }
 

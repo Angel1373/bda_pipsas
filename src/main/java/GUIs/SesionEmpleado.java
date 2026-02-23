@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,20 +24,35 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import persistencia.Dominio.PedidoActual;
 import persistencia.Dominio.Sesion;
 import persistencia.Dominio.Usuario;
+import persistencia.Dominio.empleado;
 
 /**
  *
  * @author luiscarlosbeltran
  */
-public class InicioSesion extends JFrame {
-    public InicioSesion() {
+public class SesionEmpleado extends JFrame {
+    //una lista sencilla de objetos tipo empleado, nomas para validar inicios de sesion
+    private ArrayList<empleado> listaEmpleados = new ArrayList<>();
+    private JTextField usuarioEMP;
+    private JPasswordField contraseña;
+    
+    
+    
 
-
-        // obtenemos el BO sin llamar a sus metodos
-        UsuarioBO usuarioBO = iniciarUsuario.iniciarUsuario();
-        setTitle("pantalla inicio sesion");
+    public SesionEmpleado() {
+        
+        //crea unos empleados nomas para hacer el inicio de sesion, nos e van a la base de datos
+        //nota: los borrare cada vez que salga de esta pantalla para no crear registros repetidos cada vez que se abre esta pantalla
+        listaEmpleados.add(new empleado("Papichulo666", "lolxd666"));
+        listaEmpleados.add(new empleado("brochacho", "chad0809"));
+        
+        
+        
+        
+        setTitle("pantalla inicio sesion empleado");
         setSize(700, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -79,17 +95,17 @@ public class InicioSesion extends JFrame {
         centro.add(Box.createVerticalStrut(50));
         
         //para meter el nombre de usuario
-        JLabel nU = new JLabel("Nombre de usuario");
+        JLabel nU = new JLabel("Usuario");
         nU.setFont(new Font("Serif", Font.BOLD, 20));
         nU.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(nU);
         
         
-        JTextField nombreUsuario = new JTextField("");
-        nombreUsuario.setFont(new Font("Serif", Font.BOLD, 20));
-        nombreUsuario.setMaximumSize(new Dimension(400, 50));
-        nombreUsuario.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centro.add(nombreUsuario);
+        usuarioEMP = new JTextField("");
+        usuarioEMP.setFont(new Font("Serif", Font.BOLD, 20));
+        usuarioEMP.setMaximumSize(new Dimension(400, 50));
+        usuarioEMP.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centro.add(usuarioEMP);
         centro.add(Box.createVerticalStrut(40));
         
         //para la contraseña
@@ -98,7 +114,7 @@ public class InicioSesion extends JFrame {
         contra.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(contra);
         
-        JPasswordField contraseña = new JPasswordField();
+        contraseña = new JPasswordField("");
         contraseña.setFont(new Font("Serif", Font.BOLD, 24));
         contraseña.setMaximumSize(new Dimension(400, 50));
         contraseña.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -122,51 +138,50 @@ public class InicioSesion extends JFrame {
         abajo.setBackground(new Color(200, 200, 200));
 
 
-        JButton registrarse = new JButton("No tienes cuenta? Registrate Aqui");
-        registrarse.setFont(new Font("Serif", Font.BOLD, 24));
-        registrarse.setBackground(new Color(70, 150, 220));
-        registrarse.setAlignmentX(Component.CENTER_ALIGNMENT);
-        registrarse.setMaximumSize(new Dimension(450, 60));
+        JButton volver = new JButton("Volver");
+        volver.setFont(new Font("Serif", Font.BOLD, 24));
+        volver.setBackground(new Color(255, 0, 0));
+        volver.setAlignmentX(Component.CENTER_ALIGNMENT);
+        volver.setMaximumSize(new Dimension(450, 60));
 
-        abajo.add(registrarse);
+        abajo.add(volver);
 
         add(abajo, BorderLayout.SOUTH);
         
         
-        //action listener que lleva a la pantalla de crear cuenta
-        registrarse.addActionListener(e -> {
-
-            
-        //abre la ventana de inicio de sesion
-        registroClientes reg = new registroClientes();
-        reg.setVisible(true);
-
-        //cierra esta ventana
-        dispose();
-
+        //action listener de volver, para volver (xd)
+        volver.addActionListener(e -> {
+            PantallaPrincipal principal = new PantallaPrincipal();
+            principal.setVisible(true);
+            dispose();
         });
         
         //action listener que lleva a la pantalla de opciones cliente
         iniciar.addActionListener(e -> {
-            try{
-                UsuarioDTO usuario = new UsuarioDTO();
-                usuario.setUsuario(nombreUsuario.getText().trim());
-                usuario.setContrasena(contraseña.getText().trim());
-                Usuario consultarUsuario = usuarioBO.consultarUsuario(usuario);
-                // en esta parte guardamos la sesion del usuario para poder usarlo en las demas ventanas
-                // usamos usario actual por que guarda el usuario 
-                Sesion.usuarioActual = consultarUsuario;
-                // Si llegó aquí, login exitoso
-                // Y lo mandamos a la siguiente ventana
-                JOptionPane.showMessageDialog(this, "Bienvenido " + consultarUsuario.getUsuario());
-                opcionesUsuario oU = new opcionesUsuario();
-                oU.setVisible(true);
-                dispose();           
-            }catch (negocioException ex) {
-                // si no existe el usuario le mandamos el mensaje de error de inicio de sesion
-                 JOptionPane.showMessageDialog(this, ex.getMessage(),  "Error de inicio de sesión",JOptionPane.ERROR_MESSAGE );
-            }
 
+            if (confirmarSesionEmpleado() == true) {
+        
+            // abre la pantalla opcionesEmpleado, cierra esta
+            opcionesEmpleado oe = new opcionesEmpleado();
+            oe.setVisible(true);
+            dispose();
+        
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            }
         });
     }
+    
+    public boolean confirmarSesionEmpleado() {
+        String usuarioIngresado = usuarioEMP.getText();
+        String contraseniaIngresada = new String(contraseña.getPassword());
+
+        for (empleado emp : listaEmpleados) {
+            if (usuarioIngresado.equals(emp.getUsuarioE()) && contraseniaIngresada.equals(emp.getContraseniaE())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

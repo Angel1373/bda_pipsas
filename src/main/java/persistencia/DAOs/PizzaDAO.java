@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.Dominio.Pizza;
@@ -98,20 +100,20 @@ public class PizzaDAO implements IPizzaDAO {
             LOG.log(Level.SEVERE, "Error de SQL al actualizar pizza ", ex);
             throw new persistenciaException("Error al actualizar pizza", ex);
         }
-        
-                            
+                    
     }
 
+   
     @Override
     public Pizza actualizarDisponibleYPrecio(Pizza pizza) throws persistenciaException {
-         String comandoSQL = """
+       String comandoSQL = """
                             UPDATE pizzas
                             SET precio = ?, disponible = ?
                             WHERE id_pizza = ?
                             """;
         try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL)) {
             ps.setDouble(1, pizza.getPrecio());
-            ps.setBoolean(2, pizza.isDisponible());   
+            ps.setBoolean(2, pizza.isDisponible());
             ps.setInt(3, pizza.getIdPizza());
             
             if(ps.executeUpdate() == 0){
@@ -120,8 +122,64 @@ public class PizzaDAO implements IPizzaDAO {
             }
             return pizza;
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error de SQL al actualizar pizza ", ex);
+            LOG.log(Level.SEVERE, "Error de SQL al actualizar el precio o la disponibilidad de la pizza ", ex);
             throw new persistenciaException("Error al actualizar pizza", ex);
+        }
+    }
+
+    @Override
+    public List<Pizza> obtenerTodasPizzas( ) throws persistenciaException {
+        List<Pizza> lista = new ArrayList<>();
+        String sql = "SELECT * FROM pizzas";
+
+        try (Connection conn = conexionBD.CrearConexion();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Pizza pizza = new Pizza();
+                pizza.setIdPizza(rs.getInt("id_pizza"));
+                pizza.setNombre(rs.getString("nombre"));
+                pizza.setTamano(rs.getString("tamano"));
+                pizza.setDescripcion(rs.getString("descripcion"));
+                pizza.setPrecio(rs.getDouble("precio"));
+                pizza.setDisponible(rs.getBoolean("disponible"));
+                lista.add(pizza);
+            }
+
+            return lista;
+        } catch (SQLException e) {
+            throw new persistenciaException("Error al obtener todas las pizzas", e);
+        }
+    }
+
+    @Override
+    public List<Pizza> obtenerPizzasDisponibles() throws persistenciaException {
+          List<Pizza> lista = new ArrayList<>();
+
+        String sql = "SELECT * FROM pizzas WHERE disponible = 1";
+
+        try (Connection conn = conexionBD.CrearConexion();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            
+
+            while (rs.next()) {
+                Pizza pizza = new Pizza();
+                pizza.setIdPizza(rs.getInt("id_pizza"));
+                pizza.setNombre(rs.getString("nombre"));
+                pizza.setTamano(rs.getString("tamano"));
+                pizza.setDescripcion(rs.getString("descripcion"));
+                pizza.setPrecio(rs.getDouble("precio"));
+                pizza.setDisponible(rs.getBoolean("disponible"));
+
+                lista.add(pizza);
+            }
+
+            return lista;
+
+        } catch (SQLException e) {
+            throw new persistenciaException("Error al obtener pizzas disponibles", e);
         }
     }
 

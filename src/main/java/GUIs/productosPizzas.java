@@ -7,42 +7,49 @@ package GUIs;
 import Negocio.BOs.IPizzaBO;
 import Negocio.BOs.PizzaBO;
 import Negocio.DTOs.PizzaDTO;
+import Negocio.Excepciones.negocioException;
+import fabricaClienteBO.pizzaCambioDisYPre;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import persistencia.DAOs.IPizzaDAO;
 import persistencia.DAOs.PizzaDAO;
 import persistencia.Dominio.PedidoActual;
+import persistencia.Dominio.Pizza;
 import persistencia.conexion.ConexionBD;
 
 /**
  *
  * @author luiscarlosbeltran
  */
-public class menuEXP extends JFrame {
+public class productosPizzas extends JFrame {
 
     private ConexionBD conexion;
 
-    public menuEXP() throws SQLException {
+    public productosPizzas() throws SQLException {
         conexion = new ConexionBD();
-        
+             
 
         setTitle("Menu Express");
         setSize(700, 900);
@@ -77,40 +84,27 @@ public class menuEXP extends JFrame {
         abajo.setBackground(new Color(200, 200, 200));
 
 
-        JButton volver = new JButton("Volver al inicio");
+        JButton volver = new JButton("Volver");
         volver.setFont(new Font("Serif", Font.BOLD, 24));
         volver.setBackground(new Color(255, 0, 0));
         volver.setAlignmentX(Component.CENTER_ALIGNMENT);
         volver.setMaximumSize(new Dimension(450, 60));
         abajo.add(volver);
         
-        JButton verPedido = new JButton("Ver pedido");
-        verPedido.setFont(new Font("Serif", Font.BOLD, 24));
-        verPedido.setBackground(new Color(70, 150, 220));
-        verPedido.setAlignmentX(Component.CENTER_ALIGNMENT);
-        verPedido.setMaximumSize(new Dimension(450, 60));
-        abajo.add(verPedido);
-
         add(abajo, BorderLayout.SOUTH);
 
         setVisible(true);
         
-        //actionlistener del boton para volver, y borra el "carrito"
+        //actionlistener del boton para volver,abre opcionesempleados de nuevo
         volver.addActionListener(e -> {
-            PantallaPrincipal principal = new PantallaPrincipal();
-            principal.setVisible(true);
-            PedidoActual.limpiar();
-            dispose();
-        });
-        
-        //actionlisterer del boton para ver el pedido
-        verPedido.addActionListener(e -> {
-            new MiPedidoEXP();
+            opcionesEmpleado oe = new opcionesEmpleado();
+            oe.setVisible(true);
+
             dispose();
         });
     }
     
-    // metodo que selecciona solo pizzas disponibles 
+    // metodo que selecciona todas las pizzas disponibles o no
     private void cargarPizzas(JPanel panel) {
 
         try {
@@ -118,7 +112,7 @@ public class menuEXP extends JFrame {
             IPizzaDAO pizzaDAO = new PizzaDAO(conexion);
             IPizzaBO pizzaBO = new PizzaBO(pizzaDAO);
 
-            List<PizzaDTO> pizzas = pizzaBO.obtenerPizzasDisponibles();
+            List<PizzaDTO> pizzas = pizzaBO.obtenerTodasPizzas();
 
             for (PizzaDTO pizza : pizzas) {
                 JPanel tarjeta = crearTarjeta(pizza);
@@ -148,8 +142,9 @@ public class menuEXP extends JFrame {
         JLabel lblDescripcion = new JLabel(pizza.getDescripcion());
         JLabel lblPrecio = new JLabel("Precio: $" + pizza.getPrecio());
 
-        JButton verDetalles = new JButton("Ver detalles");
-        verDetalles.setBackground(new Color(100, 200, 120));
+        
+        JButton cambiarDisponibilidadYPrecio = new JButton("Cambiar disponibilidad y precio");
+        cambiarDisponibilidadYPrecio.setBackground(new Color(100,200,100));
 
         tarjeta.add(lblNombre);
         tarjeta.add(Box.createVerticalStrut(5));
@@ -157,18 +152,72 @@ public class menuEXP extends JFrame {
         tarjeta.add(Box.createVerticalStrut(5));
         tarjeta.add(lblPrecio);
         tarjeta.add(Box.createVerticalStrut(10));
-        tarjeta.add(verDetalles);
+        tarjeta.add(cambiarDisponibilidadYPrecio);
         
-        //actionlistener del boton de ver detalles pizza, adentro de esta misma tarjeta
-        verDetalles.addActionListener(e -> {
+        
+        cambiarDisponibilidadYPrecio.addActionListener(e-> {
+         // Crear ventana modal
+        JDialog ventana = new JDialog(this, "Modificar Pizza", true);
+        ventana.setSize(350, 220);
+        ventana.setLocationRelativeTo(this);
+        ventana.setLayout(new BorderLayout(10, 10));
 
-        //abre la ventana de detalleEXP
-        DetalleEXP dp = new DetalleEXP(pizza);
-        dp.setVisible(true);
+        JPanel panelCentro = new JPanel(new GridLayout(5, 1, 5, 5));
 
-        //cierra esta ventana
-        menuEXP.this.dispose();
+        // precio
+        JLabel Precio = new JLabel("Ingrese el nuevo precio", SwingConstants.CENTER);
+        JTextField campoNuevoPrecio = new JTextField();
+        panelCentro.add(Precio);
+        panelCentro.add(campoNuevoPrecio);
+        
+        // id de la pipsa
+        JLabel pizzaID = new JLabel("Ingrese el id de la pizza");
+        JTextField campoID = new JTextField();
+        panelCentro.add(pizzaID);
+        panelCentro.add(campoID);
+
+        // disponibilidad
+        JLabel lblDisponibilidad = new JLabel("Seleccione la disponibilidad", SwingConstants.CENTER);
+        String[] opciones = {"Disponible", "No disponible"};
+        JComboBox<String> comboDisponibilidad = new JComboBox<>(opciones);
+        panelCentro.add(lblDisponibilidad);
+        panelCentro.add(comboDisponibilidad);
+
+        ventana.add(panelCentro, BorderLayout.CENTER);
+
+        // Panel de botones
+        JPanel panelBotones = new JPanel();
+        JButton btnAceptar = new JButton("Aceptar");
+        panelBotones.add(btnAceptar);
+        ventana.add(panelBotones, BorderLayout.SOUTH);
+        
+        btnAceptar.addActionListener(ev -> {
+               
+            try {
+                PizzaDTO pizzaDTO = new PizzaDTO();
+                String textoPrecio = campoNuevoPrecio.getText();
+                Double precio = Double.parseDouble(textoPrecio);
+                pizzaDTO.setPrecio(precio);
+                /*
+                Aqui si selecciona el indice 0 sera true y le pondra disponible
+                si selecciona el indice 1 sera false y le pondra no disponible
+                */
+                pizzaDTO.setDisponible(comboDisponibilidad.getSelectedIndex() == 0);
+                String textoID = campoID.getText();
+                Integer id = Integer.parseInt(textoID);
+                pizzaDTO.setId_pizza(id);
+                PizzaBO pizzaBO = pizzaCambioDisYPre.regresarBO();
+                pizzaBO.actualizarDisponibleYPrecio(pizzaDTO);
+                JOptionPane.showMessageDialog(this, "Pizza editada con éxito");
+            } catch (negocioException ex) {
+                Logger.getLogger("Error al actualizar la pizza");
+            }
+            
+            });
+            ventana.setVisible(true);
+
         });
+       
         
         return tarjeta; 
     }

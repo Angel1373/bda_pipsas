@@ -34,6 +34,13 @@ public class Pizza {
         this.disponible = disponible;
     }
 
+    public Pizza(double precio, boolean disponible) {
+        this.precio = precio;
+        this.disponible = disponible;
+    }
+    
+    
+
     public Pizza() {
     }
 

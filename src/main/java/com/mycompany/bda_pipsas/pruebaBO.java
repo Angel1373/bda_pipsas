@@ -13,6 +13,8 @@ import Negocio.DTOs.PedidoDTO;
 import Negocio.DTOs.PizzaDTO;
 import Negocio.Excepciones.negocioException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import persistencia.DAOs.ClienteDAO;
 import persistencia.DAOs.DomicilioDAO;
 import persistencia.DAOs.IClienteDAO;
@@ -56,7 +58,7 @@ public class pruebaBO {
     ClienteBO clienteBO = new ClienteBO(clienteDAO, usuarioDAO, domicilioDAO, telefonoDAO);
     PedidoBO pedidoBO = new PedidoBO(pedidoDAO);
     PizzaBO pizzaBO = new PizzaBO(pizzaDAO);
-    
+    /*
     //Cliente
     ClienteCompletoDTO dto = new ClienteCompletoDTO();
     dto.setNombres("sss");
@@ -74,13 +76,16 @@ public class pruebaBO {
 
     dto.setNumeroTelefono("6671234567");
     dto.setEtiqueta("CASA");
-
+    
+    
     try {
         Cliente clienteGuardado = clienteBO.insertarCliente(dto);
         System.out.println("Cliente guardado con ID: " + clienteGuardado.getIdCliente());
     } catch (negocioException e) {
         System.out.println("Error: " + e.getMessage());
     }
+        
+    */
     /*
     
     
@@ -96,6 +101,8 @@ public class pruebaBO {
             System.out.println("Error pedido: " + e.getMessage());
         }
  */
+    /*
+
        ClienteCompletoDTO dto2 = new ClienteCompletoDTO();
 
         dto2.setIdCliente(2);
@@ -124,6 +131,8 @@ public class pruebaBO {
         }catch (negocioException e) {
             System.out.println("Error pedido: " + e.getMessage());
         }
+        
+    */
  /*
         
         
@@ -156,6 +165,15 @@ public class pruebaBO {
             System.out.println("Error al actualizar pizza: " + e.getMessage());
         }
 */
+    PizzaDTO cambiarPizza = new PizzaDTO();
+    cambiarPizza.setId_pizza(2);
+    cambiarPizza.setPrecio(330);
+    cambiarPizza.setDisponible(false);
+        try {
+            pizzaBO.actualizarDisponibleYPrecio(cambiarPizza);
+        } catch (negocioException ex) {
+            Logger.getLogger(pruebaBO.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
 }
 
