@@ -276,6 +276,7 @@ public class registroClientes extends JFrame {
          Cliente clienteInsertado = clienteBO.insertarCliente(nuevoCliente);
           JOptionPane.showMessageDialog(this, "Cuenta creada con éxito");
         // en esta parte guardamos la sesion del usuario para poder usarlo en las demas ventanas
+        // como insertamos el cliente le damos el id del cliente creado
          Sesion.setIdCliente(clienteInsertado.getIdCliente());
         opcionesUsuario oU = new opcionesUsuario();
         oU.setVisible(true);
