@@ -9,6 +9,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -84,20 +87,26 @@ public class opcionesEmpleado extends JFrame {
         add(abajo, BorderLayout.SOUTH);
         
         //action listener de  prodcutos pizzas sisisisissi (tengo sueño llevo 8 dias sin dormir bien)
-        
         apro.addActionListener(e -> {
 
         //abre la ventana que muestra productos
-        
-        //cierra esta ventana
-        dispose();
+        productosPizzas pp;
+            try {
+                pp = new productosPizzas();
+            
+                pp.setVisible(true);
+                //cierra esta ventana
+                dispose();
+            } catch (SQLException ex) {
+                System.out.println("No se pudieron obtener las pizzas" + ex.getMessage());
+            }
         });
         
         //action listener de modificar datos
         ape.addActionListener(e -> {
 
         //abre la ventana de gestionarpedidos
-
+        
         //cierra esta ventana
         dispose();
 

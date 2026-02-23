@@ -6,6 +6,8 @@ package Negocio.BOs;
 
 import Negocio.DTOs.PizzaDTO;
 import Negocio.Excepciones.negocioException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.DAOs.IPizzaDAO;
@@ -111,6 +113,50 @@ public class PizzaBO implements IPizzaBO {
             Log.log(Level.SEVERE, "Error al actualizar la pizza", e);
 
             throw new negocioException("No se pudo actualizar la pizza", e);
+        }
+    }
+    
+    @Override
+    public List<PizzaDTO> obtenerPizzasDisponibles() throws negocioException {
+        try {
+            List<Pizza> pizzas = pizzaDAO.obtenerPizzasDisponibles();
+            List<PizzaDTO> listaDTO = new ArrayList<>();
+            for (Pizza p : pizzas) {
+                PizzaDTO dto = new PizzaDTO();
+                dto.setId_pizza(p.getIdPizza());
+                dto.setNombre(p.getNombre());
+                dto.setTamano(p.getTamano());
+                dto.setDescripcion(p.getDescripcion());
+                dto.setPrecio(p.getPrecio());
+                dto.setDisponible(p.isDisponible());
+                listaDTO.add(dto);
+            }
+            return listaDTO;
+        } catch (persistenciaException e) {
+            throw new negocioException("Error al obtener pizzas", e);
+        }
+    }
+    
+    //lo unico que cabia con el de arriba es que el dao de este obtiene todas pas pizzas, sin el where disponible = 1
+    @Override
+    public List<PizzaDTO> obtenerTodasPizzas() throws negocioException {
+        try {
+            List<Pizza> pizzas = pizzaDAO.obtenerTodasPizzas();
+            List<PizzaDTO> listaDTO = new ArrayList<>();
+
+            for (Pizza p : pizzas) {
+                PizzaDTO dto = new PizzaDTO();
+                dto.setId_pizza(p.getIdPizza());
+                dto.setNombre(p.getNombre());
+                dto.setTamano(p.getTamano());
+                dto.setDescripcion(p.getDescripcion());
+                dto.setPrecio(p.getPrecio());
+                dto.setDisponible(p.isDisponible());
+                listaDTO.add(dto);
+            }
+            return listaDTO;
+        } catch (persistenciaException e) {
+            throw new negocioException("Error al obtener todas las pizzas", e);
         }
     }
 }

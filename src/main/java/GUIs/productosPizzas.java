@@ -13,20 +13,21 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import persistencia.DAOs.IPizzaDAO;
 import persistencia.DAOs.PizzaDAO;
 import persistencia.Dominio.PedidoActual;
@@ -36,11 +37,11 @@ import persistencia.conexion.ConexionBD;
  *
  * @author luiscarlosbeltran
  */
-public class menuEXP extends JFrame {
+public class productosPizzas extends JFrame {
 
     private ConexionBD conexion;
 
-    public menuEXP() throws SQLException {
+    public productosPizzas() throws SQLException {
         conexion = new ConexionBD();
         
 
@@ -77,40 +78,27 @@ public class menuEXP extends JFrame {
         abajo.setBackground(new Color(200, 200, 200));
 
 
-        JButton volver = new JButton("Volver al inicio");
+        JButton volver = new JButton("Volver");
         volver.setFont(new Font("Serif", Font.BOLD, 24));
         volver.setBackground(new Color(255, 0, 0));
         volver.setAlignmentX(Component.CENTER_ALIGNMENT);
         volver.setMaximumSize(new Dimension(450, 60));
         abajo.add(volver);
         
-        JButton verPedido = new JButton("Ver pedido");
-        verPedido.setFont(new Font("Serif", Font.BOLD, 24));
-        verPedido.setBackground(new Color(70, 150, 220));
-        verPedido.setAlignmentX(Component.CENTER_ALIGNMENT);
-        verPedido.setMaximumSize(new Dimension(450, 60));
-        abajo.add(verPedido);
-
         add(abajo, BorderLayout.SOUTH);
 
         setVisible(true);
         
-        //actionlistener del boton para volver, y borra el "carrito"
+        //actionlistener del boton para volver,abre opcionesempleados de nuevo
         volver.addActionListener(e -> {
-            PantallaPrincipal principal = new PantallaPrincipal();
-            principal.setVisible(true);
-            PedidoActual.limpiar();
-            dispose();
-        });
-        
-        //actionlisterer del boton para ver el pedido
-        verPedido.addActionListener(e -> {
-            new MiPedidoEXP();
+            opcionesEmpleado oe = new opcionesEmpleado();
+            oe.setVisible(true);
+
             dispose();
         });
     }
     
-    // metodo que selecciona solo pizzas disponibles 
+    // metodo que selecciona todas las pizzas disponibles o no
     private void cargarPizzas(JPanel panel) {
 
         try {
@@ -118,7 +106,7 @@ public class menuEXP extends JFrame {
             IPizzaDAO pizzaDAO = new PizzaDAO(conexion);
             IPizzaBO pizzaBO = new PizzaBO(pizzaDAO);
 
-            List<PizzaDTO> pizzas = pizzaBO.obtenerPizzasDisponibles();
+            List<PizzaDTO> pizzas = pizzaBO.obtenerTodasPizzas();
 
             for (PizzaDTO pizza : pizzas) {
                 JPanel tarjeta = crearTarjeta(pizza);
@@ -148,8 +136,11 @@ public class menuEXP extends JFrame {
         JLabel lblDescripcion = new JLabel(pizza.getDescripcion());
         JLabel lblPrecio = new JLabel("Precio: $" + pizza.getPrecio());
 
-        JButton verDetalles = new JButton("Ver detalles");
-        verDetalles.setBackground(new Color(100, 200, 120));
+        JButton cambiarPrecio = new JButton("Cambiar precio");
+        cambiarPrecio.setBackground(new Color(100, 200, 120));
+        
+        JButton cambiarDisp = new JButton("Cambiar disponibilidad");
+        cambiarDisp.setBackground(new Color(100, 200, 120));
 
         tarjeta.add(lblNombre);
         tarjeta.add(Box.createVerticalStrut(5));
@@ -157,17 +148,78 @@ public class menuEXP extends JFrame {
         tarjeta.add(Box.createVerticalStrut(5));
         tarjeta.add(lblPrecio);
         tarjeta.add(Box.createVerticalStrut(10));
-        tarjeta.add(verDetalles);
+        tarjeta.add(cambiarPrecio);
+        tarjeta.add(cambiarDisp);
         
-        //actionlistener del boton de ver detalles pizza, adentro de esta misma tarjeta
-        verDetalles.addActionListener(e -> {
+        //actionlistener del boton cambiarprecio, abre ventana emergente 
+        cambiarPrecio.addActionListener(e -> {
+            JDialog ventanaPrecio = new JDialog(this, "Cambiar Precio", true);
+            ventanaPrecio.setSize(350, 180);
+            ventanaPrecio.setLocationRelativeTo(this);
+            ventanaPrecio.setLayout(new BorderLayout(10, 10));
+            
+            //centro
+            JPanel panelCentro = new JPanel(new GridLayout(2, 1, 5, 5));
+            JLabel mensaje = new JLabel("Ingrese el nuevo precio", SwingConstants.CENTER);
+            JTextField campoNuevoPrecio = new JTextField();
 
-        //abre la ventana de detalleEXP
-        DetalleEXP dp = new DetalleEXP(pizza);
-        dp.setVisible(true);
+            panelCentro.add(mensaje);
+            panelCentro.add(campoNuevoPrecio);
 
-        //cierra esta ventana
-        menuEXP.this.dispose();
+            ventanaPrecio.add(panelCentro, BorderLayout.CENTER);
+
+            // Panel botones
+            JPanel panelBotones = new JPanel();
+            JButton btnAceptar = new JButton("Aceptar");
+
+            panelBotones.add(btnAceptar);
+
+            ventanaPrecio.add(panelBotones, BorderLayout.SOUTH);
+            
+            ventanaPrecio.setVisible(true);
+
+            //actionlistener del boton aceptar para aceptar cambiar el precio
+            btnAceptar.addActionListener(ev -> {
+                //meter la logica del boton aceptar aqui, que modifique el precio y cierre esta ventana
+            });
+        });
+        
+        
+        //action listenrer del boton para cambiar disponibiliddad
+        cambiarDisp.addActionListener(e -> {
+
+            JDialog ventanaDisp = new JDialog(this, "Cambiar Disponibilidad", true);
+            ventanaDisp.setSize(350, 180);
+            ventanaDisp.setLocationRelativeTo(this);
+            ventanaDisp.setLayout(new BorderLayout(10, 10));
+
+            // Panel central
+            JPanel panelCentro = new JPanel(new GridLayout(2, 1, 5, 5));
+
+            JLabel mensaje = new JLabel("Seleccione la disponibilidad", SwingConstants.CENTER);
+
+            String[] opciones = {"Disponible", "No disponible"};
+            JComboBox<String> comboDisponibilidad = new JComboBox<>(opciones);
+
+            panelCentro.add(mensaje);
+            panelCentro.add(comboDisponibilidad);
+
+            ventanaDisp.add(panelCentro, BorderLayout.CENTER);
+
+            //boton acepatr
+            JPanel panelBotones = new JPanel();
+            JButton btnAceptar = new JButton("Aceptar");
+
+            panelBotones.add(btnAceptar);
+
+            ventanaDisp.add(panelBotones, BorderLayout.SOUTH);
+
+            //boton de aceptar, meter la logica aqui para cambiar el estado
+            btnAceptar.addActionListener(ev -> {
+                //logica
+            });
+            
+            ventanaDisp.setVisible(true);
         });
         
         return tarjeta; 
