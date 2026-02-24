@@ -184,9 +184,36 @@ public class estadosPedidos extends JFrame {
         ventana.add(panelBotones, BorderLayout.SOUTH);
         
         btnAceptar.addActionListener(ev -> {
-            //chavo aqui va la logica del boton aceptar, 
-            //al aceptar, que se cambie el estado del pedido seleccionado
-            //al estado seleccionado del combobox
+            try{ 
+            // Obtiene el estado seleccionado del ComboBox
+            String nuevoEstado = (String) comboboxEstados.getSelectedItem();
+            // Se crea un DTO para enviar la informacion al BO
+            PedidoDTO pedidoActualizar = new PedidoDTO();
+            // se asignar el ID del pedido seleccionado
+            pedidoActualizar.setIdPedido(pedido.getIdPedido());
+            // se asignar el nuevo estado elegido por el usuario
+            pedidoActualizar.setEstado(nuevoEstado);
+            // se crea el DAO
+            IPedidoDAO pedidoDAO = new PedidoDAO(conexion);
+            // se crea el BO pasando el DAO
+            IPedidoBO pedidoBO = new PedidoBO(pedidoDAO);
+            // se manda actualizar el estado
+            pedidoBO.actualizarEstadoPedido(pedidoActualizar);
+            // mensaje de existo al usuario de que si se pudo actualizar
+            JOptionPane.showMessageDialog(this, "Estado actualizado correctamente");
+            // cierra la ventana actual
+            ventana.dispose();
+            // refresca la pantalla de pedidos
+            dispose(); 
+            new estadosPedidos().setVisible(true);
+            // error controlado por el negocio
+            }catch(negocioException ex){
+                JOptionPane.showConfirmDialog(this, ex.getMessage());
+            // error por si pasa algo inesperado
+            }catch(Exception ex){
+                JOptionPane.showConfirmDialog(this, "Error al actualizar el estado");
+                ex.printStackTrace();
+            }
             });
             ventana.setVisible(true);
 

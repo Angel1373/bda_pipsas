@@ -109,4 +109,43 @@ public class PedidoBO implements IPedidoBO {
                 throw new negocioException("Error al obtener pedidos", e);
             }
     }
+
+    @Override
+    public void actualizarEstadoPedido(PedidoDTO pedido) throws negocioException {
+        // 1. Validacion: el objeto no puede ser nulo
+        if(pedido == null){
+            Log.warning("Pedido nulo");
+            throw new negocioException("El pedido no puede ser nulo");
+            
+        }
+        // 2. Validacion: el ID debe ser valido
+        if(pedido.getIdPedido() <= 0){
+            throw new negocioException("ID de pedido invalido");
+        }
+        // 3. Validacion: el estado es obligatorio
+        if(pedido.getEstado() == null || pedido.getEstado().trim().isEmpty()){
+            throw new negocioException("El estado es obligatorio");
+        }
+        // Se crea la entidad de dominio
+        Pedido pedidos = new Pedido();
+        pedidos.setIdPedido(pedido.getIdPedido());
+        // Convierte el String recibido del GUI a un ENUM del sistema
+        try{Pedido.estadoPedido estadoEnum = Pedido.estadoPedido.fromValor(pedido.getEstado());
+        // Se asigna el estado convertido
+        pedidos.setEstado(estadoEnum);
+        
+        }catch(IllegalArgumentException e){
+            // Si el estado no existe en el enum
+            throw new negocioException("Estado invalido");
+            
+        }
+        try{pedidoDAO.actualizarEstadoPedido(pedidos);
+        } catch(persistenciaException e){
+            // Registro del error en logs
+            Log.log(Level.SEVERE, "Error al actualizar estado", e);
+            // Se lanza excepcion de negocio hacia la GUI
+            throw new negocioException("No se puede actualizar el estado pedido", e);
+        }
+        
+    }
 }

@@ -148,10 +148,10 @@ public class PedidoDAO implements IPedidoDAO {
         List<Pedido> lista = new ArrayList<>();
 
         //los ordena dandole prioridad a los que estan listos
-        String sql = "select * from pedidos order by (estado = 'listo') desc, estado";
+        String comandoSQL = "select * from pedidos order by (estado = 'listo') desc, estado";
         
         try (Connection conn = conexionBD.CrearConexion();
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(comandoSQL);
             ResultSet rs = ps.executeQuery()) {
             
 
@@ -175,5 +175,28 @@ public class PedidoDAO implements IPedidoDAO {
             throw new persistenciaException("Error al obtener pedidos", e);
         }
     }
+    // Metodo para actualizar en un estado de pedido
+    @Override
+    public void actualizarEstadoPedido(Pedido pedido) throws persistenciaException {
+        // Consulta SQL para actualizar únicamente el estado del pedido
+        String comandoSQL = """
+                            UPDATE pedidos 
+                            SET estado = ?
+                            WHERE id_pedido = ?""";
+        
+        try(Connection conn = conexionBD.CrearConexion();
+                PreparedStatement ps = conn.prepareStatement(comandoSQL)){
+            // getValor() obtiene el texto del enum
+            ps.setString(1, pedido.getEstado().getValor());
+            // Se asigna el ID del pedido al segundo parametro
+            ps.setInt(2,pedido.getIdPedido());
+            // Ejecuta la actualizacion en la base de datos
+            ps.executeUpdate();
+        // Si ocurre un error SQL, se transforma en excepcion de persistencia
+        } catch (SQLException ex) {
+            throw new persistenciaException("Error al actualizar estado del pedido");
+        }
+    }
+    
 
 }

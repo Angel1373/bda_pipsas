@@ -20,4 +20,7 @@ public interface IPedidoBO {
     public void confirmarPedidoCompleto(String notas, List<DetallePedidoDTO> detalles) throws negocioException;
     
     List<PedidoDTO> obtenerPedidos() throws negocioException;
+    
+    public void actualizarEstadoPedido(PedidoDTO pedido) throws negocioException;
+    
 }
