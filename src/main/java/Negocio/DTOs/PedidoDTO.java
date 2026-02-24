@@ -10,17 +10,24 @@ package Negocio.DTOs;
  * @author Gael Galaviz
  */
 public class PedidoDTO {
+    
+    private int idPedido;
     private String estado;
     private String notas ;
     private double costo;
 
-    public PedidoDTO(String estado, String notas, double costo) {
+    public PedidoDTO(int idPedido, String estado, String notas, double costo) {
+        this.idPedido = idPedido;
         this.estado = estado;
         this.notas = notas;
         this.costo = costo;
     }
 
     public PedidoDTO() {
+    }
+    
+    public int getIdPedido() {
+        return idPedido;
     }
 
     public String getEstado() {
@@ -29,6 +36,10 @@ public class PedidoDTO {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+    
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
     public String getNotas() {
@@ -49,7 +60,7 @@ public class PedidoDTO {
 
     @Override
     public String toString() {
-        return "PedidoDTO{" + "estado=" + estado + ", notas=" + notas + ", costo=" + costo + '}';
+        return "PedidoDTO{" + "idPedido=" + idPedido + "estado=" + estado + ", notas=" + notas + ", costo=" + costo + '}';
     }
     
     

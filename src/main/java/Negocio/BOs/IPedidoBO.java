@@ -18,4 +18,6 @@ public interface IPedidoBO {
     public Pedido insertarPedido(PedidoDTO pedido) throws negocioException;
     
     public void confirmarPedidoCompleto(String notas, List<DetallePedidoDTO> detalles) throws negocioException;
+    
+    List<PedidoDTO> obtenerPedidos() throws negocioException;
 }

@@ -8,6 +8,7 @@ package Negocio.BOs;
 import Negocio.DTOs.DetallePedidoDTO;
 import Negocio.DTOs.PedidoDTO;
 import Negocio.Excepciones.negocioException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,4 +88,25 @@ public class PedidoBO implements IPedidoBO {
         }
     }
     
+    
+    @Override
+    public List<PedidoDTO> obtenerPedidos() throws negocioException {
+
+        try {
+            List<Pedido> pedidos = pedidoDAO.obtenerPedidos();
+            List<PedidoDTO> listaDTO = new ArrayList<>();
+
+            for (Pedido p : pedidos) {
+                PedidoDTO dto = new PedidoDTO();
+                dto.setIdPedido(p.getIdPedido());
+                dto.setEstado(p.getEstado().getValor());
+                dto.setNotas(p.getNotas());
+                dto.setCosto(p.getCosto());
+                listaDTO.add(dto);
+            }
+            return listaDTO;            
+        } catch (persistenciaException e) {
+                throw new negocioException("Error al obtener pedidos", e);
+            }
+    }
 }

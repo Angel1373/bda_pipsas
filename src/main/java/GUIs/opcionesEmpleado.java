@@ -102,11 +102,16 @@ public class opcionesEmpleado extends JFrame {
             }
         });
         
-        //action listener de modificar datos
+        //action listener de administrar peddios
         ape.addActionListener(e -> {
 
-        //abre la ventana de gestionarpedidos
-        
+            try {
+                //abre la ventana de gestionarpedidos
+                estadosPedidos eP = new estadosPedidos();
+                eP.setVisible(true);
+            } catch (SQLException ex) {
+                System.out.println("No se puedo obtener los pedidos" + ex.getMessage());
+            }
         //cierra esta ventana
         dispose();
 

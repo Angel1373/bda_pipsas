@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -139,4 +140,40 @@ public class PedidoDAO implements IPedidoDAO {
             }
         }
     }
+    
+    //un metodo para obtener pedidos
+    @Override
+    public List<Pedido> obtenerPedidos() throws persistenciaException {
+        
+        List<Pedido> lista = new ArrayList<>();
+
+        //los ordena dandole prioridad a los que estan listos
+        String sql = "select * from pedidos order by (estado = 'listo') desc, estado";
+        
+        try (Connection conn = conexionBD.CrearConexion();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            
+
+            while (rs.next()) {
+                Pedido pedido = new Pedido();
+                pedido.setIdPedido(rs.getInt("id_pedido"));
+                
+                //usa el 
+                String estado = rs.getString("estado");
+                pedido.setEstado(Pedido.estadoPedido.fromValor(estado));
+                
+                pedido.setNotas(rs.getString("notas"));
+                pedido.setCosto(rs.getDouble("costo"));
+
+                lista.add(pedido);
+            }
+
+            return lista;
+
+        } catch (SQLException e) {
+            throw new persistenciaException("Error al obtener pedidos", e);
+        }
+    }
+
 }

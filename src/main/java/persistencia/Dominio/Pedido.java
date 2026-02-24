@@ -54,6 +54,16 @@ public class Pedido {
         public String getValor() {
             return valor;
         }
+        
+        //convierte un String a un estado, solo si existe
+        public static estadoPedido fromValor(String valor) {
+            for (estadoPedido e : estadoPedido.values()) {
+                if (e.getValor().equalsIgnoreCase(valor)) {
+                    return e;
+                }
+            }
+            throw new IllegalArgumentException("Ese estado no es valido");
+        }
     }
 
     public int getIdPedido() {

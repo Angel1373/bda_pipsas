@@ -18,4 +18,6 @@ public interface IPedidoDAO {
     Pedido agregarPedido(Pedido pedido) throws persistenciaException;
     
     Pedido agregarPedidoCompleto(Pedido pedido, List<DetallePedidoDTO> detalles) throws persistenciaException;
+    
+    public List<Pedido> obtenerPedidos() throws persistenciaException;
 }
