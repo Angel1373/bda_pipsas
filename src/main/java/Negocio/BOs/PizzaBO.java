@@ -47,8 +47,7 @@ public class PizzaBO implements IPizzaBO {
         // 4. Validar que el precio sea mayor a 0
         if (pizza.getPrecio() <= 0) {
             throw new negocioException("El precio debe de ser mayor a 0");
-
-        }
+        }    
         // 5. Validar que la descripcion exista
         if (pizza.getDescripcion() == null || pizza.getDescripcion().trim().isEmpty()) {
             throw new negocioException("La descripcion es obligatorio");

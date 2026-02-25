@@ -10,14 +10,14 @@ package persistencia.Dominio;
  */
 public class Pizza {
     
-    private int idPizza;
+    private Integer idPizza;
     private String nombre;
     private String tamano;
     private String descripcion;
     private double precio;
     private boolean disponible;
 
-    public Pizza(int idPizza, String nombre, String tamano, String descripcion, double precio, boolean disponible) {
+    public Pizza(Integer idPizza, String nombre, String tamano, String descripcion, double precio, boolean disponible) {
         this.idPizza = idPizza;
         this.nombre = nombre;
         this.tamano = tamano;
@@ -44,14 +44,15 @@ public class Pizza {
     public Pizza() {
     }
 
-    public int getIdPizza() {
+    public Integer getIdPizza() {
         return idPizza;
     }
 
-    public void setIdPizza(int idPizza) {
+    public void setIdPizza(Integer idPizza) {
         this.idPizza = idPizza;
     }
 
+    
     public String getNombre() {
         return nombre;
     }

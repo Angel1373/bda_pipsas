@@ -9,14 +9,14 @@ package Negocio.DTOs;
  * @author Gael Galaviz
  */
 public class PizzaDTO {
-    private int id_pizza;
+    private Integer id_pizza;
     private String nombre;
     private String tamano;
     private String descripcion;
     private double precio;
     private boolean disponible;
 
-    public PizzaDTO(int id_pizza, String nombre, String tamano, String descripcion, double precio, boolean disponible) {
+    public PizzaDTO(Integer id_pizza, String nombre, String tamano, String descripcion, double precio, boolean disponible) {
         this.id_pizza = id_pizza;
         this.nombre = nombre;
         this.tamano = tamano;
@@ -40,14 +40,15 @@ public class PizzaDTO {
     public PizzaDTO() {
     }
 
-    public int getId_pizza() {
+    public Integer getId_pizza() {
         return id_pizza;
     }
 
-    public void setId_pizza(int id_pizza) {
+    public void setId_pizza(Integer id_pizza) {
         this.id_pizza = id_pizza;
     }
 
+    
     public String getNombre() {
         return nombre;
     }

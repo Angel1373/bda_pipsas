@@ -143,7 +143,7 @@ public class productosPizzas extends JFrame {
         JLabel lblPrecio = new JLabel("Precio: $" + pizza.getPrecio());
 
         
-        JButton cambiarDisponibilidadYPrecio = new JButton("Cambiar disponibilidad, precio y descripción");
+        JButton cambiarDisponibilidadYPrecio = new JButton("Actualizar la pizza");
         cambiarDisponibilidadYPrecio.setBackground(new Color(100,200,100));
 
         tarjeta.add(lblNombre);
@@ -162,7 +162,7 @@ public class productosPizzas extends JFrame {
         ventana.setLocationRelativeTo(this);
         ventana.setLayout(new BorderLayout(10, 10));
 
-        JPanel panelCentro = new JPanel(new GridLayout(5, 1, 5, 5));
+        JPanel panelCentro = new JPanel(new GridLayout(7, 1, 7, 7));
 
         // precio
         JLabel Precio = new JLabel("Ingrese el nuevo precio", SwingConstants.CENTER);
@@ -188,6 +188,18 @@ public class productosPizzas extends JFrame {
         JComboBox<String> comboDisponibilidad = new JComboBox<>(opciones);
         panelCentro.add(lblDisponibilidad);
         panelCentro.add(comboDisponibilidad);
+        
+        // disponibilidad
+        JLabel lbTamano = new JLabel("Seleccione el tamaño de la pizza");
+        JTextField tamano = new JTextField();
+        panelCentro.add(lbTamano);
+        panelCentro.add(tamano);
+        
+        // disponibilidad
+        JLabel lbNombre = new JLabel("Seleccione el nombre de la pizza");
+        JTextField nombre = new JTextField();
+        panelCentro.add(lbNombre);
+        panelCentro.add(nombre);
 
         ventana.add(panelCentro, BorderLayout.CENTER);
 
@@ -213,11 +225,14 @@ public class productosPizzas extends JFrame {
                 Integer id = Integer.parseInt(textoID);
                 pizzaDTO.setId_pizza(id);
                 pizzaDTO.setDescripcion(descripcion.getText().trim());
+                pizzaDTO.setTamano(tamano.getText());
+                pizzaDTO.setNombre(nombre.getText());
                 PizzaBO pizzaBO = pizzaCambioDisYPre.regresarBO();
-                pizzaBO.actualizarDisponibleYPrecio(pizzaDTO);
+                pizzaBO.actualizarPizza(pizzaDTO);
                 JOptionPane.showMessageDialog(this, "Pizza editada con éxito");
             } catch (negocioException ex) {
-                Logger.getLogger("Error al actualizar la pizza");
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
             
             });
