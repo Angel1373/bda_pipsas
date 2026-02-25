@@ -161,6 +161,7 @@ public class InicioSesion extends JFrame {
                 // en esta parte guardamos la sesion del usuario para poder usarlo en las demas ventanas
                 // usamos usario actual por que guarda el usuario 
                 Sesion.usuarioActual = consultarUsuario;
+                Sesion.setIdCliente(consultarUsuario.getId_cliente());
                 // Si llegó aquí, login exitoso
                 // Y lo mandamos a la siguiente ventana
                 JOptionPane.showMessageDialog(this, "Bienvenido " + consultarUsuario.getUsuario());

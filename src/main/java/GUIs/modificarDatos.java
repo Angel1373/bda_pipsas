@@ -114,7 +114,7 @@ public class modificarDatos extends JFrame {
         centro.add(aMaterno);
 
         //para la fecha de nacimiento
-        JLabel fechanacimientoLabel = new JLabel("Fecha de Nacimiento");
+        JLabel fechanacimientoLabel = new JLabel("Fecha de Nacimiento YYYY-MM-DD");
         fechanacimientoLabel.setFont(new Font("Serif", Font.BOLD, 20));
         JTextField fechanacimiento = new JTextField();
         fechanacimiento.setFont(new Font("Serif", Font.BOLD, 20));
@@ -275,16 +275,18 @@ public class modificarDatos extends JFrame {
          //le damos el id del cliente a la sesion mediante el modificado
          Sesion.setIdCliente(clienteModificado.getIdCliente());
          JOptionPane.showMessageDialog(this, "Modificacion con éxito ");
+         //abre la ventana de opciones cliente
+         opcionesUsuario oU = new opcionesUsuario();
+         oU.setVisible(true);
+
+         //cierra esta ventana
+         dispose();
+         
          }catch (negocioException ex) {
                 Logger.getLogger("Error al insertar al cliente");
                 JOptionPane.showMessageDialog(this, ex.getMessage(),  "Error al actualizar ",JOptionPane.ERROR_MESSAGE );
               }
-        //abre la ventana de opciones cliente
-        opcionesUsuario oU = new opcionesUsuario();
-        oU.setVisible(true);
-
-        //cierra esta ventana
-        dispose();
+        
 
         });
     }

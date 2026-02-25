@@ -23,8 +23,7 @@ public class PizzaEnPedidoDAO implements IPizzaEnPedidoDAO {
     }
 
     @Override
-    public void insertarPizzaEnPedido(int idPedido, int idPizza, int cantidad, String notas)
-            throws persistenciaException {
+    public void insertarPizzaEnPedido(int idPedido, int idPizza, int cantidad, String notas) throws persistenciaException {
 
         String sql = "insert into pizzasEnPedidos (id_pedido, id_pizza, cantidad_pizza, notas) values (?,?,?,?)";
 

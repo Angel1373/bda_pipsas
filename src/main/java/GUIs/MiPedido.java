@@ -24,10 +24,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import persistencia.DAOs.IPedidoDAO;
 import persistencia.DAOs.PedidoDAO;
+import persistencia.DAOs.PizzaEnPedidoDAO;
+import persistencia.Dominio.Pedido;
 import persistencia.Dominio.PedidoActual;
+import persistencia.Dominio.Sesion;
 import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
@@ -90,6 +93,15 @@ public class MiPedido extends JFrame {
         cargarTarjetas();
         actualizarTotal();
         
+        JPanel panelCupon = new JPanel(new BorderLayout());
+        panelCupon.setBorder(BorderFactory.createTitledBorder("Cupon (opcional)"));
+
+        JTextField areacupon = new JTextField();
+        panelCupon.add(areacupon, BorderLayout.CENTER);
+
+        centroPrincipal.add(Box.createVerticalStrut(10));
+        centroPrincipal.add(panelCupon);
+        
         //------ parte de abajo ------
         JPanel abajo = new JPanel();
         abajo.setBackground(new Color(200, 200, 200));
@@ -132,44 +144,61 @@ public class MiPedido extends JFrame {
         
         //aqui va uno largo... action listener del boton confirmar pedido
         confirmar.addActionListener(e -> {
-            
-            try {
-                if (PedidoActual.getDetalles().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "No hay productos en el pedido", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                
-                IConexionBD conexion = new ConexionBD();
-                
-                IPedidoDAO pedidoDAO = new PedidoDAO(conexion);
-                
-                IPedidoBO pedidoBO = new PedidoBO(pedidoDAO);
-                
-                pedidoBO.confirmarPedidoCompleto( "Pedido generado desde la aplicacion", PedidoActual.getDetalles());
-                
-                JOptionPane.showMessageDialog(this, "Su pedido ha sido confirmado");
-                
-                PedidoActual.limpiar();//quita las cosas del "carrito" o sea ya no van a estar las pizzas para cuando se empiece otro peddio
-                
-                cargarTarjetas();
-                actualizarTotal();
-                
-                } catch (negocioException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Error al confirmar pedido:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            
 
+    try {
 
-            //abre la ventana de menuProgramado
-            try{
-                menuProgramado mP = new menuProgramado();
-                mP.setVisible(true);
-                dispose();
-                } catch (SQLException ex){
-            
-                } 
-            });
+        if (PedidoActual.getDetalles().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay productos en el pedido");
+            return;
+        }
+
+        Integer idCliente = Sesion.getIdCliente();
+
+        if (idCliente == null) {
+            JOptionPane.showMessageDialog(this, "Debe iniciar sesión");
+            return;
+        }
+
+        String codigoCupon = areacupon.getText().trim();
+        double total = PedidoActual.calcularTotal();
+
+        IConexionBD conexion = new ConexionBD();
+        PedidoDAO pedidoDAO = new PedidoDAO(conexion);
+        PizzaEnPedidoDAO detalleDAO = new PizzaEnPedidoDAO(conexion);
+
+        Pedido pedido = new Pedido();
+        pedido.setEstado(Pedido.estadoPedido.PENDIENTE);
+        pedido.setNotas("Pedido Programado");
+        pedido.setCosto(total);
+
+        int idPedido;
+
+        if (!codigoCupon.isEmpty()) {
+            idPedido = pedidoDAO.crearPedidoProgramadoConCupon(
+                    idCliente, codigoCupon, pedido.getNotas(), total);
+        } else {
+            idPedido = pedidoDAO.crearPedidoProgramadoSinCupon(idCliente, pedido);
+        }
+
+        for (DetallePedidoDTO detalle : PedidoActual.getDetalles()) {
+            detalleDAO.insertarPizzaEnPedido(
+                    idPedido,
+                    detalle.getPizza().getId_pizza(),
+                    detalle.getCantidad(),
+                    detalle.getNotas()
+            );
+        }
+
+        JOptionPane.showMessageDialog(this, "Pedido confirmado correctamente");
+
+        PedidoActual.limpiar();
+        dispose();
+        new menuProgramado().setVisible(true);
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage());
+    }
+});
     }
 
     /**

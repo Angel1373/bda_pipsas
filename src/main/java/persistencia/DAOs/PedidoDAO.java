@@ -5,6 +5,7 @@
 package persistencia.DAOs;
 
 import Negocio.DTOs.DetallePedidoDTO;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -198,5 +199,72 @@ public class PedidoDAO implements IPedidoDAO {
         }
     }
     
+    //metodo que usa la procedure mezclada con transaccion de la BD
+    public int crearPedidoProgramadoConCupon(int idCliente, String codigoCupon, String notas, double costo) throws persistenciaException {
+        
+        String sql = "{CALL crear_pedido_programado_con_cupon(?,?,?,?)}";
 
+        try (Connection conn = conexionBD.CrearConexion();
+            CallableStatement cs = conn.prepareCall(sql)) {
+
+            cs.setInt(1, idCliente);
+            cs.setString(2, codigoCupon);
+            cs.setString(3, notas);
+            cs.setDouble(4, costo);
+            
+            try (ResultSet rs = cs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_pedido");
+                }
+            }
+            
+            throw new persistenciaException("No se pudo obtener el ID del pedido");
+        } catch (SQLException e) {
+            throw new persistenciaException(e.getMessage(), e);
+        }
+    }
+    
+    //metodo para crear el peddio programado, sin cupon ahora
+    public int crearPedidoProgramadoSinCupon(int idCliente, Pedido pedido) throws persistenciaException {
+        String sqlinsertPedido = "INSERT INTO pedidos (estado, notas, costo) VALUES (?,?,?)";
+        String sqlinsertProgramado = "INSERT INTO pedidosProgramados (id_pedido, id_cliente) VALUES (?,?)";
+        Connection conn = null;
+        try {
+            conn = conexionBD.CrearConexion();
+            conn.setAutoCommit(false);
+            
+            int idGenerado;
+
+            try (PreparedStatement ps = conn.prepareStatement(sqlinsertPedido, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, pedido.getEstado().getValor());
+                ps.setString(2, pedido.getNotas());
+                ps.setDouble(3, pedido.getCosto());
+                ps.executeUpdate();
+
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    rs.next();
+                    idGenerado = rs.getInt(1);
+                }
+            }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(sqlinsertProgramado)) {
+                ps2.setInt(1, idGenerado);
+                ps2.setInt(2, idCliente);
+                ps2.executeUpdate();
+            }
+
+            conn.commit();
+            return idGenerado;
+        } catch (SQLException e) {
+            try { 
+                if (conn != null) conn.rollback(); 
+            } catch (SQLException ex) {
+                System.out.println("Error: "+ ex.getMessage());
+            }
+            throw new persistenciaException(e.getMessage(), e);
+            } finally {
+                try { if (conn != null) conn.close(); } catch (SQLException e) {}
+    }
+}
+    
 }

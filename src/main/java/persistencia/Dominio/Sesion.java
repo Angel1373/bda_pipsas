@@ -14,24 +14,31 @@ public class Sesion {
     Es static para que todas las clases puedan acceder a su valor y por eso es importante para guardar la sesion
     */
     public static Usuario usuarioActual;
+    public static Integer idCliente;
     
-    private static Integer idCliente;
-
+    public static void setUsuarioActual(Usuario usuario) {
+        usuarioActual = usuario;
+        if (usuario != null) {
+            idCliente = usuario.getId_cliente();
+        }
+    }
+    
     public static Usuario getUsuarioActual() {
         return usuarioActual;
     }
-
-    public static void setUsuarioActual(Usuario usuarioActual) {
-        Sesion.usuarioActual = usuarioActual;
+    
+    public static void setIdCliente(Integer id) {
+        idCliente = id;
     }
-
+    
     public static Integer getIdCliente() {
         return idCliente;
     }
-
-    public static void setIdCliente(Integer idCliente) {
-        Sesion.idCliente = idCliente;
+    
+    public static void cerrarSesion() {
+        usuarioActual = null;
+        idCliente = null;
     }
-    
-    
 }
+
+

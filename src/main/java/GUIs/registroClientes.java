@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import persistencia.Dominio.Cliente;
 import persistencia.Dominio.Sesion;
+import persistencia.Dominio.Usuario;
 
 /**
  *
@@ -98,7 +99,7 @@ public class registroClientes extends JFrame {
         centro.add(aMaterno);
 
         //para la fecha de nacimiento
-        JLabel fechanacimientoLabel = new JLabel("Fecha de Nacimiento");
+        JLabel fechanacimientoLabel = new JLabel("Fecha de Nacimiento YYYY-MM-DD");
         fechanacimientoLabel.setFont(new Font("Serif", Font.BOLD, 20));
         JTextField fechanacimiento = new JTextField();
         fechanacimiento.setFont(new Font("Serif", Font.BOLD, 20));
@@ -256,7 +257,11 @@ public class registroClientes extends JFrame {
           JOptionPane.showMessageDialog(this, "Cuenta creada con éxito");
         // en esta parte guardamos la sesion del usuario para poder usarlo en las demas ventanas
         // como insertamos el cliente le damos el id del cliente creado
-         Sesion.setIdCliente(clienteInsertado.getIdCliente());
+        Usuario usuarioSesion = new Usuario();
+        usuarioSesion.setId_cliente(clienteInsertado.getIdCliente());
+        Sesion.setUsuarioActual(usuarioSesion);
+         
+         
         opcionesUsuario oU = new opcionesUsuario();
         oU.setVisible(true);
         dispose();
