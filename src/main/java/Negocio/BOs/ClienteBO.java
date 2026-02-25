@@ -125,10 +125,10 @@ public class ClienteBO implements IClienteBO {
             throw new negocioException("La edad es invalida");
         }
         //15. validar el numero de telefono
-            if(cliente.getNumeroTelefono()== null){
-            LOG.warning("El cliente no puede no tener un numero de telefono");
-            throw new negocioException("El numero de telefono es invalido");
-        }   
+        if (!validarTelefono(cliente.getNumeroTelefono())) {
+            LOG.warning("Telefono invalido");
+            throw new negocioException("El numero de telefono debe tener 10 digitos");
+        }  
             
         /*
         En esta parte primero creamos el usuario para poder usar el id cliente en todas las tablas que se ocupen unir
@@ -257,7 +257,11 @@ public class ClienteBO implements IClienteBO {
             LOG.warning("El cliente no puede no tener una edad");
             throw new negocioException("La edad es invalida");
         }
-         
+         if (!validarTelefono(cliente.getNumeroTelefono())) {
+            LOG.warning("Telefono invalido");
+            throw new negocioException("El numero de telefono debe tener 10 digitos");
+        }
+        
         Cliente clienteActualizar = new Cliente();
         clienteActualizar.setIdCliente(cliente.getIdCliente());
         clienteActualizar.setNombres(cliente.getNombres());
@@ -320,6 +324,17 @@ public class ClienteBO implements IClienteBO {
         return clienteActualizar;       
         }
 
+    public static boolean validarTelefono(String telefono) {
+    if (telefono == null) {
+        return false;
+    }
+    
+    // Quitamos los espacios
+    telefono = telefono.trim();
+    
+    // Validar que tenga exactamente 10 dígitos
+    return telefono.matches("\\d{10}");
+}
     }
     
 

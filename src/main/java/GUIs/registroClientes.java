@@ -87,7 +87,7 @@ public class registroClientes extends JFrame {
         centro.add(aPaterno);
 
         //para meter apellido materno (opcional)
-        JLabel am = new JLabel("Apellido Materno)");
+        JLabel am = new JLabel("Apellido Materno");
         am.setFont(new Font("Serif", Font.BOLD, 20));
         am.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(am);
