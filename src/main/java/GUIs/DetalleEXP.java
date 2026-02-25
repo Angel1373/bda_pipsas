@@ -26,11 +26,18 @@ import javax.swing.SwingConstants;
 import persistencia.Dominio.PedidoActual;
 
 /**
- *
+ * Clase del apartado express, para ver los detalles al seleccionar una pizza
+ * y confirmar que se añade al pedido
+ * 
+ * 
  * @author luiscarlosbeltran
  */
 public class DetalleEXP extends JFrame {
 
+    /**
+     * metodo para mostrar la pantalla de DetalleEXP
+     * @param pizza recibe un PizzaDTO, la seleccionada en menuEXP
+     */
     public DetalleEXP(PizzaDTO pizza) {
 
         setTitle("Detalle Pizza EXP");

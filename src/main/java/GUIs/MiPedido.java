@@ -32,7 +32,7 @@ import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
 /**
- *
+ * Pantalla (DE PEDIDO PROGRAMADO) en la que el usuario ve su pedido actual. Como si fuera un "carrito de compras"
  * @author luiscarlosbeltran
  */
 public class MiPedido extends JFrame {
@@ -40,6 +40,9 @@ public class MiPedido extends JFrame {
     private JLabel lblTotal;
     private JPanel panelTarjetas;
 
+    /**
+     * metodo para crear y mostrar MiPedido
+     */
     public MiPedido() {
 
         setTitle("Mi Pedido");
@@ -169,6 +172,9 @@ public class MiPedido extends JFrame {
             });
     }
 
+    /**
+     * Metodo para enseñar las tarjetitas de cada pipsa creada
+     */
     private void cargarTarjetas() {
 
         panelTarjetas.removeAll();
@@ -184,6 +190,11 @@ public class MiPedido extends JFrame {
         panelTarjetas.repaint();
     }
 
+    /**
+     * crea las tarjetitas de cada pipsa que selecciono el ususario
+     * @param detalle es el "producto" que se mete al carrito
+     * @return un JPanel que es la tarjetita de cada pipsa
+     */
     private JPanel crearTarjeta(DetallePedidoDTO detalle) {
 
         JPanel tarjeta = new JPanel();
@@ -226,6 +237,9 @@ public class MiPedido extends JFrame {
         return tarjeta;
     }
 
+    /**
+     * pone el texto del label que muestra el total, es dinamico, o sae se actualiza con los precios de las pipsas seleccionadas
+     */
     private void actualizarTotal() {
         lblTotal.setText("Pedido ----- Total: $" + PedidoActual.calcularTotal());
     }

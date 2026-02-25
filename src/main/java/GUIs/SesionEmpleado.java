@@ -4,10 +4,7 @@
  */
 package GUIs;
 
-import Negocio.BOs.UsuarioBO;
-import Negocio.DTOs.UsuarioDTO;
-import Negocio.Excepciones.negocioException;
-import fabricaClienteBO.iniciarUsuario;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -24,16 +21,14 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import persistencia.Dominio.PedidoActual;
-import persistencia.Dominio.Sesion;
-import persistencia.Dominio.Usuario;
 import persistencia.Dominio.empleado;
 
 /**
- *
+ * La pantalla para inicar sesion como empelado
  * @author luiscarlosbeltran
  */
 public class SesionEmpleado extends JFrame {
+    
     //una lista sencilla de objetos tipo empleado, nomas para validar inicios de sesion
     private ArrayList<empleado> listaEmpleados = new ArrayList<>();
     private JTextField usuarioEMP;
@@ -41,7 +36,9 @@ public class SesionEmpleado extends JFrame {
     
     
     
-
+    /**
+     * Metodo que crea y muestra la pantalla SesionEmpleado
+     */
     public SesionEmpleado() {
         
         //crea unos empleados nomas para hacer el inicio de sesion, nos e van a la base de datos
@@ -172,6 +169,11 @@ public class SesionEmpleado extends JFrame {
         });
     }
     
+    /**
+     * Metodo simple para validar los datos de un empleado y dejarlo iniciar sesion o no
+     * no se mete en la BD porque no hay tabla de empleado, por eso los declare arriba (xddd)
+     * @return true si los datos coinciden, falso en caso contrario
+     */
     public boolean confirmarSesionEmpleado() {
         String usuarioIngresado = usuarioEMP.getText();
         String contraseniaIngresada = new String(contraseña.getPassword());

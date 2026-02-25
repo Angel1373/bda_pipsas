@@ -36,11 +36,14 @@ import persistencia.conexion.ConexionBD;
 import persistencia.conexion.IConexionBD;
 
 /**
- *
+ * pantalla para que el cliente entre y modifique sus datos
  * @author luiscarlosbeltran
  */
 public class modificarDatos extends JFrame {
     
+    /**
+     * metodo que crea y muestra la pantalla modificarDatos
+     */
     public modificarDatos() {
         
        IConexionBD conexion = new ConexionBD();

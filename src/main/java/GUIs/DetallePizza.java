@@ -13,7 +13,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,11 +26,16 @@ import javax.swing.SwingConstants;
 import persistencia.Dominio.PedidoActual;
 
 /**
- *
+ *Clase del apartado programado, para ver los detalles al seleccionar una pizza
+ * y confirmar que se añade al pedido
  * @author luiscarlosbeltran
  */
 public class DetallePizza extends JFrame {
 
+    /**
+     * metodo para mostrar la pantalla de DetallePizza
+     * @param pizza recibe un PizzaDTO, la seleccionada en menuProgramado
+     */
     public DetallePizza(PizzaDTO pizza) {
 
         setTitle("Detalle Pizza");

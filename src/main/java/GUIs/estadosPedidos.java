@@ -42,13 +42,17 @@ import persistencia.DAOs.PizzaDAO;
 import persistencia.conexion.ConexionBD;
 
 /**
- *
+ * pantalla donde salen todos los pedidos con prioridad a listos, para que los empleados seleccionen cambairles el estado
  * @author luiscarlosbeltran
  */
 public class estadosPedidos extends JFrame {
 
     private ConexionBD conexion;
 
+    /**
+     * metodo que crea y muestra la pantalla estadosPedidos
+     * @throws SQLException 
+     */
     public estadosPedidos() throws SQLException {
         conexion = new ConexionBD();
              
@@ -127,7 +131,7 @@ public class estadosPedidos extends JFrame {
         }
     }
     
-    //crea una tarjetita, apartado para mostrar informacion de una pizza
+    //crea una tarjetita, apartado para mostrar informacion de una pedido
     private JPanel crearTarjeta(PedidoDTO pedido) {
 
         JPanel tarjeta = new JPanel();

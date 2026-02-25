@@ -27,10 +27,15 @@ import persistencia.Dominio.Sesion;
 import persistencia.Dominio.Usuario;
 
 /**
- *
+ * La pantalla de iniciar sesion como usuario
  * @author luiscarlosbeltran
  */
 public class InicioSesion extends JFrame {
+    
+    /**
+     * Metodo que abre la pantalla para inicar sesion como usuario
+     * si los datos coinciden debe abrir la siguiente pantalla, opcionesUsuario
+     */
     public InicioSesion() {
 
 

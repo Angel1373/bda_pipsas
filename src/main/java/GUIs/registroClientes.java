@@ -5,13 +5,9 @@
 package GUIs;
 
 import Negocio.BOs.ClienteBO;
-import Negocio.BOs.IClienteBO;
-import Negocio.BOs.UsuarioBO;
 import Negocio.DTOs.ClienteCompletoDTO;
 import Negocio.Excepciones.negocioException;
-import fabricaClienteBO.iniciarUsuario;
 import fabricaClienteBO.registrarCliente;
-import static fabricaClienteBO.registrarCliente.registrarCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -19,10 +15,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.time.LocalDate;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,20 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import persistencia.DAOs.ClienteDAO;
-import persistencia.DAOs.DomicilioDAO;
-import persistencia.DAOs.IClienteDAO;
-import persistencia.DAOs.IDomicilioDAO;
-import persistencia.DAOs.IPedidoDAO;
-import persistencia.DAOs.ITelefonoDAO;
-import persistencia.DAOs.IUsuarioDAO;
-import persistencia.DAOs.PedidoDAO;
-import persistencia.DAOs.TelefonoDAO;
-import persistencia.DAOs.UsuarioDAO;
 import persistencia.Dominio.Cliente;
 import persistencia.Dominio.Sesion;
-import persistencia.conexion.ConexionBD;
-import persistencia.conexion.IConexionBD;
 
 /**
  *
@@ -53,8 +34,6 @@ import persistencia.conexion.IConexionBD;
 public class registroClientes extends JFrame {
     public registroClientes() {
         
-        IConexionBD conexion = new ConexionBD();
-
        
         // llamamos al metodo para crear el BO con los DAOs para no usarlos en el GUI
         ClienteBO clienteBO = registrarCliente.registrarCliente();

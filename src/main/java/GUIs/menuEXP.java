@@ -13,9 +13,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -26,20 +23,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import persistencia.DAOs.IPizzaDAO;
 import persistencia.DAOs.PizzaDAO;
 import persistencia.Dominio.PedidoActual;
 import persistencia.conexion.ConexionBD;
 
 /**
- *
+ * pantalla de menu EXPRESS que muestra las pizzas disponibles para que seleccionar
  * @author luiscarlosbeltran
  */
 public class menuEXP extends JFrame {
 
     private ConexionBD conexion;
 
+    /**
+     * metodo que crea y muestra la pantalla menuEXP
+     * @throws SQLException 
+     */
     public menuEXP() throws SQLException {
         conexion = new ConexionBD();
         

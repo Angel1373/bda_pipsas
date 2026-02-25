@@ -10,8 +10,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,10 +19,14 @@ import javax.swing.JPanel;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
- *
+ * pantalla de opciones de empelado, para elegir que hacer despues de iniciar sesion
  * @author luiscarlosbeltran
  */
 public class opcionesEmpleado extends JFrame {
+    
+    /**
+     * metodo que crea y muestra la pantalla de opcionesEmpleado
+     */
     public opcionesEmpleado(){
         setTitle("pantalla opciones usuario");
         setSize(700, 1000);
@@ -68,6 +70,15 @@ public class opcionesEmpleado extends JFrame {
         ape.setMaximumSize(new Dimension(350, 60));
         centro.add(ape);
         centro.add(Box.createVerticalStrut(50));
+        
+        //boton para insertar pizzas
+        JButton inserPizza = new JButton("Insertar Pizza");
+        inserPizza.setFont(new Font("Serif", Font.BOLD, 20));
+        inserPizza.setBackground(new Color(100, 200, 120));
+        inserPizza.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inserPizza.setMaximumSize(new Dimension(350, 60));
+        centro.add(inserPizza);
+
         
         add(centro, BorderLayout.CENTER);
         
@@ -115,6 +126,13 @@ public class opcionesEmpleado extends JFrame {
         //cierra esta ventana
         dispose();
 
+        });
+        
+        //actionlistener del boton que lleva a la pantalla para añadir una nueva pizppsa
+        inserPizza.addActionListener(e -> {
+            insertarPizza ip = new insertarPizza();
+            ip.setVisible(true);
+            dispose();    
         });
         
         //action listener de cerrar sesion que lleva a la pantalla principal

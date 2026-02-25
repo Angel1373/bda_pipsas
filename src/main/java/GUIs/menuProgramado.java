@@ -12,9 +12,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -30,13 +27,17 @@ import persistencia.DAOs.PizzaDAO;
 import persistencia.conexion.ConexionBD;
 
 /**
- *
+ * pantalla de menu PROGRAMADO que muestra las pizzas disponibles para que seleccionar
  * @author luiscarlosbeltran
  */
 public class menuProgramado extends JFrame {
 
     private ConexionBD conexion;
 
+    /**
+     * metodo que crea y muestra la pantalla de menuProgramado
+     * @throws SQLException 
+     */
     public menuProgramado() throws SQLException {
         conexion = new ConexionBD();
         

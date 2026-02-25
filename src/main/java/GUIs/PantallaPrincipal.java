@@ -10,22 +10,24 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.SQLException;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
- *
+ * La pantalla principal, de aqui parte todo
  * @author luiscarlosbeltran
  */
 public class PantallaPrincipal extends JFrame {
 
+    /**
+     * metodo para crear y mostrar la pantalla principal
+     * se pueden seleccionar opciones para entrar como usuario, como empleado o relaizar un pedido express
+     */
     public PantallaPrincipal() {
 
         setTitle("pantalla inicio");
