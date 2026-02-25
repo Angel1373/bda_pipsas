@@ -128,6 +128,7 @@ public class PedidoBO implements IPedidoBO {
         }
         // Se crea la entidad de dominio
         Pedido pedidos = new Pedido();
+        
         pedidos.setIdPedido(pedido.getIdPedido());
         // Convierte el String recibido del GUI a un ENUM del sistema
         try{Pedido.estadoPedido estadoEnum = Pedido.estadoPedido.fromValor(pedido.getEstado());

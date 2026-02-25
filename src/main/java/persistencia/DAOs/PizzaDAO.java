@@ -108,13 +108,14 @@ public class PizzaDAO implements IPizzaDAO {
     public Pizza actualizarDisponibleYPrecio(Pizza pizza) throws persistenciaException {
        String comandoSQL = """
                             UPDATE pizzas
-                            SET precio = ?, disponible = ?
+                            SET tamano = ?,precio = ?, disponible = ?
                             WHERE id_pizza = ?
                             """;
         try (Connection conn = this.conexionBD.CrearConexion(); PreparedStatement ps = conn.prepareStatement(comandoSQL)) {
-            ps.setDouble(1, pizza.getPrecio());
-            ps.setBoolean(2, pizza.isDisponible());
-            ps.setInt(3, pizza.getIdPizza());
+            ps.setString(1, pizza.getDescripcion());
+            ps.setDouble(2, pizza.getPrecio());
+            ps.setBoolean(3, pizza.isDisponible());
+            ps.setInt(4, pizza.getIdPizza());
             
             if(ps.executeUpdate() == 0){
                 throw new persistenciaException("No se pudo actualizar: el ID de pizza no existe.");

@@ -176,6 +176,7 @@ public class PizzaBO implements IPizzaBO {
         try{
        Pizza pizzaCambiar = new Pizza();
        pizzaCambiar.setIdPizza(pizza.getId_pizza());
+       pizzaCambiar.setDescripcion(pizza.getDescripcion());
        pizzaCambiar.setPrecio(pizza.getPrecio());
        pizzaCambiar.setDisponible(pizza.isDisponible());
        pizzaDAO.actualizarDisponibleYPrecio(pizzaCambiar);
