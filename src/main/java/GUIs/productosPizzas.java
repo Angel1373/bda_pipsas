@@ -130,7 +130,7 @@ public class productosPizzas extends JFrame {
 
         JPanel tarjeta = new JPanel();
         tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
-        tarjeta.setMaximumSize(new Dimension(600, 150));
+        tarjeta.setMaximumSize(new Dimension(900, 450));
         tarjeta.setBackground(Color.WHITE);
         tarjeta.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -158,11 +158,11 @@ public class productosPizzas extends JFrame {
         cambiarDisponibilidadYPrecio.addActionListener(e-> {
          // Crear ventana modal
         JDialog ventana = new JDialog(this, "Modificar Pizza", true);
-        ventana.setSize(350, 220);
+        ventana.setSize(600, 420);
         ventana.setLocationRelativeTo(this);
         ventana.setLayout(new BorderLayout(10, 10));
 
-        JPanel panelCentro = new JPanel(new GridLayout(7, 1, 7, 7));
+        JPanel panelCentro = new JPanel(new GridLayout(9, 2, 9, 9));
 
         // precio
         JLabel Precio = new JLabel("Ingrese el nuevo precio", SwingConstants.CENTER);

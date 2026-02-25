@@ -87,7 +87,7 @@ public class registroClientes extends JFrame {
         centro.add(aPaterno);
 
         //para meter apellido materno (opcional)
-        JLabel am = new JLabel("Apellido Materno (Opcional)");
+        JLabel am = new JLabel("Apellido Materno)");
         am.setFont(new Font("Serif", Font.BOLD, 20));
         am.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(am);
@@ -138,7 +138,7 @@ public class registroClientes extends JFrame {
         centro.add(etiquetaTelefono);
 
         //calle (opcional)
-        JLabel calleLabel = new JLabel("Calle (opcional)");
+        JLabel calleLabel = new JLabel("Calle");
         calleLabel.setFont(new Font("Serif", Font.BOLD, 20));
         calleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(calleLabel);
@@ -151,7 +151,7 @@ public class registroClientes extends JFrame {
         centro.add(calle);
 
         //colonia (opcional)
-        JLabel coloniaLabel = new JLabel("Colonia (opcional)");
+        JLabel coloniaLabel = new JLabel("Colonia");
         coloniaLabel.setFont(new Font("Serif", Font.BOLD, 20));
         coloniaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(coloniaLabel);
@@ -163,7 +163,7 @@ public class registroClientes extends JFrame {
         centro.add(colonia);
 
         //numero (opcional)
-        JLabel numeroLabel = new JLabel("Numero (opcional)");
+        JLabel numeroLabel = new JLabel("Numero");
         numeroLabel.setFont(new Font("Serif", Font.BOLD, 20));
         numeroLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centro.add(numeroLabel);
