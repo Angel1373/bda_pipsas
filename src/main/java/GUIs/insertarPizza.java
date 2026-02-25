@@ -5,8 +5,11 @@
 package GUIs;
 
 import Negocio.BOs.ClienteBO;
+import Negocio.BOs.PizzaBO;
 import Negocio.DTOs.ClienteCompletoDTO;
+import Negocio.DTOs.PizzaDTO;
 import Negocio.Excepciones.negocioException;
+import fabricaClienteBO.pizzaCambioDisYPre;
 import fabricaClienteBO.registrarCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,6 +18,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.time.LocalDate;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -40,6 +44,8 @@ public class insertarPizza extends JFrame {
      * metodo que crea y muestra la pantalla insertarPizza
      */
     public insertarPizza() {
+        
+        PizzaBO pizzabo = pizzaCambioDisYPre.regresarBO();
 
         setTitle("pantalla insertar pizza");
         setSize(700, 1000);
@@ -159,6 +165,21 @@ public class insertarPizza extends JFrame {
         
         //action listener que registra la pipsa
         insertarPipsa.addActionListener(e -> {
+            //Creamos una pizza con su DTO
+            PizzaDTO nuevaPipsa = new PizzaDTO();
+            nuevaPipsa.setNombre(nombres.getText().trim());
+            nuevaPipsa.setDescripcion(descripcion.getText().trim());
+            nuevaPipsa.setTamano(tamano.getText().trim());
+            String precioTx = precio.getText();
+            Integer precio2 = Integer.parseInt(precioTx);
+            nuevaPipsa.setPrecio(precio2);
+            nuevaPipsa.setDisponible(combopciones.getSelectedIndex() == 0);
+            try {
+                pizzabo.insertarPizza(nuevaPipsa);
+            JOptionPane.showMessageDialog(this, "Pizza insertada con éxito"); 
+            } catch (negocioException ex) {
+                Logger.getLogger("Error al insertar la pizza");
+            }
             
         });
     }

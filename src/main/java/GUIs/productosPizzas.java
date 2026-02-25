@@ -143,7 +143,7 @@ public class productosPizzas extends JFrame {
         JLabel lblPrecio = new JLabel("Precio: $" + pizza.getPrecio());
 
         
-        JButton cambiarDisponibilidadYPrecio = new JButton("Cambiar disponibilidad y precio");
+        JButton cambiarDisponibilidadYPrecio = new JButton("Cambiar disponibilidad, precio y descripción");
         cambiarDisponibilidadYPrecio.setBackground(new Color(100,200,100));
 
         tarjeta.add(lblNombre);
@@ -175,6 +175,12 @@ public class productosPizzas extends JFrame {
         JTextField campoID = new JTextField();
         panelCentro.add(pizzaID);
         panelCentro.add(campoID);
+        
+        // id de la pipsa
+        JLabel descripcionLB = new JLabel("Ingrese la nueva descripcion de la pizza");
+        JTextField descripcion = new JTextField();
+        panelCentro.add(descripcionLB);
+        panelCentro.add(descripcion);
 
         // disponibilidad
         JLabel lblDisponibilidad = new JLabel("Seleccione la disponibilidad", SwingConstants.CENTER);
@@ -206,6 +212,7 @@ public class productosPizzas extends JFrame {
                 String textoID = campoID.getText();
                 Integer id = Integer.parseInt(textoID);
                 pizzaDTO.setId_pizza(id);
+                pizzaDTO.setDescripcion(descripcion.getText().trim());
                 PizzaBO pizzaBO = pizzaCambioDisYPre.regresarBO();
                 pizzaBO.actualizarDisponibleYPrecio(pizzaDTO);
                 JOptionPane.showMessageDialog(this, "Pizza editada con éxito");
